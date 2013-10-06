@@ -1,25 +1,26 @@
 First proof of concept.
 
-TODO:
-- visualizer
-- icon visualizer
-- on/off
-- support for dynamicly loaded audio/video tags
+###TODO:
+* visualizer
+* icon visualizer
+* on/off
+* support for dynamicly loaded audio/video tags
 
-* Requirements:
+
+##Requirements:
 Install [HTML5ify](https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop)
 
-* Test videos:
-YouTube:
-http://www.youtube.com/watch?v=nLwML2PagbY
+##Test videos:
+###YouTube:
+* http://www.youtube.com/watch?v=nLwML2PagbY
 
-Vimeo:
-http://vimeo.com/watch
-http://ff0000.com/about/ (Vimeo iframe video)
+###Vimeo:
+* http://vimeo.com/watch
+* http://ff0000.com/about/ (Vimeo iframe video)
 
-Grooveshark:
-http://html5.grooveshark.com/
+###Grooveshark:
+* http://html5.grooveshark.com/
 
-HTML5 video:
-http://www.videojs.com/
+###HTML5 video:
+* http://www.videojs.com/
 
