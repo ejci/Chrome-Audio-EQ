@@ -13,6 +13,7 @@ Install [HTML5ify](https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjm
 ##Test videos:
 ###YouTube:
 * http://www.youtube.com/watch?v=nLwML2PagbY
+* http://www.youtube.com/watch?v=Q3iJvJmlwVk
 
 ###Vimeo:
 * http://vimeo.com/watch
