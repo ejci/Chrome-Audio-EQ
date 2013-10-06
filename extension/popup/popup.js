@@ -114,16 +114,6 @@ document.addEventListener("DOMContentLoaded", function() {
             eqSettings.filter4000 = getValue('ch-eq-slider-4000');
             eqSettings.filter8000 = getValue('ch-eq-slider-8000');
             eqSettings.filter16000 = getValue('ch-eq-slider-16000');
-            eq[0].gain = eqSettings.filter32;
-            eq[1].gain = eqSettings.filter64;
-            eq[2].gain = eqSettings.filter125;
-            eq[3].gain = eqSettings.filter250;
-            eq[4].gain = eqSettings.filter500;
-            eq[5].gain = eqSettings.filter1000;
-            eq[6].gain = eqSettings.filter2000;
-            eq[7].gain = eqSettings.filter4000;
-            eq[8].gain = eqSettings.filter8000;
-            eq[9].gain = eqSettings.filter16000;
 
         }
 
@@ -143,7 +133,48 @@ document.addEventListener("DOMContentLoaded", function() {
         //console.log(inputs);
         inputs[i].onchange = onchange;
     }
+    //TODO: dont repeat yor self!
+    document.getElementById('reset').onclick = function() {
+        for (var i = 0; i < eq.length; i++) {
+            eq[i].gain = 0;
+        }
+        eqSettings.filter32 = getValue('ch-eq-slider-32');
+        setValue('ch-eq-slider-32', eq[0].gain);
+        setValue('ch-eq-slider-64', eq[1].gain);
+        setValue('ch-eq-slider-125', eq[2].gain);
+        setValue('ch-eq-slider-250', eq[3].gain);
+        setValue('ch-eq-slider-500', eq[4].gain);
+        setValue('ch-eq-slider-1000', eq[5].gain);
+        setValue('ch-eq-slider-2000', eq[6].gain);
+        setValue('ch-eq-slider-4000', eq[7].gain);
+        setValue('ch-eq-slider-8000', eq[8].gain);
+        setValue('ch-eq-slider-16000', eq[9].gain);
+
+        eqSettings.filter32 = getValue('ch-eq-slider-32');
+        eqSettings.filter64 = getValue('ch-eq-slider-64');
+        eqSettings.filter125 = getValue('ch-eq-slider-125');
+        eqSettings.filter250 = getValue('ch-eq-slider-250');
+        eqSettings.filter500 = getValue('ch-eq-slider-500');
+        eqSettings.filter1000 = getValue('ch-eq-slider-1000');
+        eqSettings.filter2000 = getValue('ch-eq-slider-2000');
+        eqSettings.filter4000 = getValue('ch-eq-slider-4000');
+        eqSettings.filter8000 = getValue('ch-eq-slider-8000');
+        eqSettings.filter16000 = getValue('ch-eq-slider-16000');
+
+        //send message
+        try {
+            //console.log('popup.js', eqSettings);
+            chrome.runtime.sendMessage({
+                action : 'set',
+                eqSettings : eqSettings
+            });
+        } catch(e) {
+            // :)
+        }
+    };
+
     try {
+        //TODO: change eqSettings object... (send directky eq object)
         chrome.storage.local.get(function(items) {
             console.log(items, items['eqSettings']);
             var eqSettings = items['eqSettings'];
@@ -158,6 +189,16 @@ document.addEventListener("DOMContentLoaded", function() {
             setValue('ch-eq-slider-4000', eqSettings.filter4000);
             setValue('ch-eq-slider-8000', eqSettings.filter8000);
             setValue('ch-eq-slider-16000', eqSettings.filter16000);
+            eq[0].gain = eqSettings.filter32;
+            eq[1].gain = eqSettings.filter64;
+            eq[2].gain = eqSettings.filter125;
+            eq[3].gain = eqSettings.filter250;
+            eq[4].gain = eqSettings.filter500;
+            eq[5].gain = eqSettings.filter1000;
+            eq[6].gain = eqSettings.filter2000;
+            eq[7].gain = eqSettings.filter4000;
+            eq[8].gain = eqSettings.filter8000;
+            eq[9].gain = eqSettings.filter16000;
         });
     } catch(e) {
         // :)

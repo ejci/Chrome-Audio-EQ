@@ -1,7 +1,7 @@
 {
 	"name": "Chrome EQ",
 	"description": "Chrome HTML5 Audio Equalizer",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"manifest_version": 2,
 	"permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
 	"background": {
@@ -17,7 +17,8 @@
 			"matches": ["<all_urls>"],
 			"css": [],
 			"js": ["page/page.js"],
-			"run_at": "document_start"
+			"run_at": "document_start",
+			"all_frames": true
 		}
 	],
 	"homepage_url": "http://lab.ejci.net/ChromeEQ",
