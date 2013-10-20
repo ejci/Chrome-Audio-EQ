@@ -4,43 +4,41 @@
         <title>Popup Page</title>
         <link href="http://fonts.googleapis.com/css?family=Rationale" rel="stylesheet" type="text/css">
         <link href="popup.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="../common/logger.js"></script>
+        <script type="text/javascript" src="../common/const.js"></script>
         <script type="text/javascript" src="popup.js"></script>
     </head>
 
     <body>
         <div class="ch-eq-controls">
-            <!--button>
-                On/off
-            </button-->
-            <button id="reset">
-                Reset
-            </button>
+            <a class="button" id="reset"> Reset </a>
+
         </div>
 
         <table class="ch-eq" cellspacing="0" cellpadding="0">
             <tr class="sliders">
                 <td class="ch-eq-volume">
-                <input id="ch-eq-slider-master" class="ch-eq-slider master" eq="master" type="range" min="0" step="0.05" max="2" value="1">
+                <input id="ch-eq-slider-0" class="ch-eq-slider master" eq="master" type="range" min="0" step="0.05" max="2" value="1">
                 </td><td>
-                <input id="ch-eq-slider-32" class="ch-eq-slider" eq="32" type="range" min="-12" step="0.051" max="12" value="0">
+                <input id="ch-eq-slider-1" class="ch-eq-slider" eq="32" type="range" min="-12" step="0.051" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-64" class="ch-eq-slider" eq="64" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-2" class="ch-eq-slider" eq="64" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-125" class="ch-eq-slider" eq="125" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-3" class="ch-eq-slider" eq="125" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-250" class="ch-eq-slider" eq="250" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-4" class="ch-eq-slider" eq="250" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-500" class="ch-eq-slider" eq="500" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-5" class="ch-eq-slider" eq="500" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-1000" class="ch-eq-slider" eq="1000" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-6" class="ch-eq-slider" eq="1000" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-2000" class="ch-eq-slider" eq="2000" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-7" class="ch-eq-slider" eq="2000" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-4000" class="ch-eq-slider" eq="4000" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-8" class="ch-eq-slider" eq="4000" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-8000" class="ch-eq-slider" eq="8000" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-9" class="ch-eq-slider" eq="8000" type="range" min="-12" step="0.05" max="12" value="0">
                 </td><td>
-                <input id="ch-eq-slider-16000" class="ch-eq-slider" eq="16000" type="range" min="-12" step="0.05" max="12" value="0">
+                <input id="ch-eq-slider-10" class="ch-eq-slider" eq="16000" type="range" min="-12" step="0.05" max="12" value="0">
                 </td>
             </tr>
             <tr class="ch-eq ch-eq-label">
