@@ -1,37 +1,70 @@
 body {
 	font-family:'Rationale',sans-serif;
-	background-color:#111;
-	background:linear-gradient(to bottom, #111 0%,#202020 50%,#1c1c1c 100%);
+	background:linear-gradient(to bottom, rgb(251,251,251) 0%,rgb(229,229,229) 100%);
 	margin:0;
 	padding:0;
+	color:rgb(50,90,140);
+}
+.info {
+	font-family:Arial;
+	position:absolute;
+	display:block;
+	bottom:5px;
+	right:5px;
+	color:#bbb;
+	border:1px solid #bbb;
+	border-radius:6px;
+	text-decoration:none;
+	text-align:center;
+	font-size:10px;
+	width:12px;
+	height:12px;
+	line-height:12px;
+}
+.info:focus {
+	outline:none;
+}
+.info:hover {
+	color:rgb(50,90,140);
+	border:1px solid rgb(50,90,140);
+	cursor:hand;
 }
 .button {
-	border-radius:3px;
+	border-radius:2px;
+	border-top:1px solid #ccc;
+	border-left:1px solid #ccc;
+	border-right:1px solid #bbb;
+	border-bottom:1px solid #bbb;
 	width:36px;
-	height:15px;
+	height:20px;
 	display:inline-block;
-	background-color:#555;
-	color:#999;
-	font-size:12px;
+	background:linear-gradient(to bottom, rgb(251,251,251) 0%,rgb(229,229,229) 100%);
+	color:rgb(50,90,140);
+	font-size:10px;
 	text-align:center;
-	line-height:15px;
+	line-height:20px;
 	text-decoration:none;
-	margin-top:15px;
+	margin-top:10px;
 	margin-left:17px;
 }
 .button:hover {
-	background-color:#505050;
-	color:#aaa;
+	color:rgb(70,110,170);
 	cursor:hand;
 }
+.button:focus {
+	outline:none;
+}
 .button:active {
-	background-color:#444;
-	color:#a0a0a0;
+	background:linear-gradient(to bottom, rgb(229,229,229) 0%,rgb(251,251,251) 100%);
+	border-top:1px solid #aaa;
+	border-left:1px solid #aaa;
+	border-right:1px solid #bbb;
+	border-bottom:1px solid #bbb;
+	color:rgb(50,90,140);
 }
 .ch-eq-chart {
 	width:330px;
 	height:40px;
-	background-color:#900;
 	float:right;
 	margin-right:20px;
 }
@@ -48,7 +81,7 @@ body {
 }
 .ch-eq {
 	width:400px;
-	color:#aaa;
+	color:rgb(50,90,140);
 	margin-top:0px;
 	margin-bottom:10px;
 	margin-right:20px;
@@ -58,7 +91,7 @@ body {
 	width:30px;
 }
 .ch-eq .ch-eq-label {
-	font-size:8px;
+	font-size:10px;
 	line-height:12px;
 }
 .ch-eq .sliders {

@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     logger.log('popup.js');
     var eq = CONST.EQ;
+    var canvas, context;
     logger.log(eq);
 
     function getValue(id) {
@@ -19,6 +20,66 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return false;
     }
+
+    var prepareChart = function() {
+        canvas = document.getElementById('ch-eq-chart');
+        //330x40
+        canvas.width = 330;
+        canvas.height = 40;
+        context = canvas.getContext('2d');
+        context.beginPath();
+        context.moveTo(17, 20);
+        context.lineTo(314, 20);
+        context.lineWidth = 0.2;
+        context.strokeStyle = 'rgb(200,200,200)';
+        context.stroke();
+        context.beginPath();
+        context.beginPath();
+        for (var l = eq.length, i = 0; i < l; i++) {
+            context.moveTo((i * 33) + 17, 5);
+            context.lineTo((i * 33) + 17, 35);
+        }
+        context.lineWidth = 0.2;
+        context.strokeStyle = 'rgb(200,200,200)';
+        context.stroke();
+        context.beginPath();
+        context.stroke();
+        context.font = '6px Arial';
+        context.textAlign = 'right';
+        context.fillStyle = 'rgb(50,90,140)';
+        context.fillText('+12', 14, 6 + 3);
+        context.fillText('-12', 14, 40 - 3);
+        context.textAlign = 'left';
+        context.fillText('+12', 316, 6 + 3);
+        context.fillText('-12', 316, 40 - 3);
+        context.closePath();
+
+        refreshChart();
+    };
+    var refreshChart = function() {
+        var points = [];
+        for (var l = eq.length, i = 1; i < l; i++) {
+            points.push({
+                x : ((i - 1) * 33) + 17,
+                y : 20 - (15 / 12) * eq[i].gain,
+                xc : 0,
+                xy : 0
+            });
+        }
+        console.log(points);
+        context.beginPath();
+        context.moveTo(points[0].x, points[0].y);
+        for ( i = 1; i < points.length - 2; i++) {
+            var xc = (points[i].x + points[i + 1].x) / 2;
+            var yc = (points[i].y + points[i + 1].y) / 2;
+            context.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+        }
+        context.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+        context.lineWidth = 0.5;
+        //context.strokeStyle = 'rgb(180,180,180)';
+        context.strokeStyle = 'rgb(50,90,140)';
+        context.stroke();
+    };
 
     function onchange() {
         var slider = this.getAttribute('eq');
@@ -52,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
             setValue('ch-eq-slider-8', eq[8].gain);
             setValue('ch-eq-slider-9', eq[9].gain);
             setValue('ch-eq-slider-10', eq[10].gain);
-
+            prepareChart();
         }
 
         //send message
@@ -107,8 +168,21 @@ document.addEventListener("DOMContentLoaded", function() {
     try {
         chrome.storage.local.get(function(items) {
             logger.log(items, items['eq']);
-            var eq = items['eq'];
+            eq = items['eq'];
+            setValue('ch-eq-slider-0', eq[0].gain);
+            setValue('ch-eq-slider-1', eq[1].gain);
+            setValue('ch-eq-slider-2', eq[2].gain);
+            setValue('ch-eq-slider-3', eq[3].gain);
+            setValue('ch-eq-slider-4', eq[4].gain);
+            setValue('ch-eq-slider-5', eq[5].gain);
+            setValue('ch-eq-slider-6', eq[6].gain);
+            setValue('ch-eq-slider-7', eq[7].gain);
+            setValue('ch-eq-slider-8', eq[8].gain);
+            setValue('ch-eq-slider-9', eq[9].gain);
+            setValue('ch-eq-slider-10', eq[10].gain);
+            prepareChart();
         });
+
     } catch(e) {
         // Psssst! Dont tell anyone :)
     }
