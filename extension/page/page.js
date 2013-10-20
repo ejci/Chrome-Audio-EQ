@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             filters[0].gain.value = 1;
-            console.log(filters);
+            //console.log(filters);
             /*
              filter32 = createFilter(32, 3);
              filter64 = createFilter(64, 5);
@@ -53,9 +53,9 @@ document.addEventListener("DOMContentLoaded", function() {
              */
             initialized = true;
 
-            console.log('eq.init', 'done');
+            //console.log('eq.init', 'done');
         } catch(e) {
-            console.error('eq.init', e);
+            //console.error('eq.init', e);
         }
 
     };
@@ -98,10 +98,10 @@ document.addEventListener("DOMContentLoaded", function() {
             //console.log('eq.attach', 'done');
 
             if (count > 0) {
-                console.log('eq.attach', 'Attached to ' + count + ' video/audio sources.');
+                //console.log('eq.attach', 'Attached to ' + count + ' video/audio sources.');
             }
         } catch(e) {
-            console.error('eq.attach', e);
+            //console.error('eq.attach', e);
             //throw e;
         }
     };
@@ -112,14 +112,14 @@ document.addEventListener("DOMContentLoaded", function() {
     eq.set = function(options) {
         try {
             if (filters[0]) {
-                console.log(options);
+                //console.log(options);
                 for (var l = filters.length, i = 0; i < l; i++) {
-                    console.log(filters[i].gain.value + ' --> ' + options.eq[i].gain);
+                    //console.log(filters[i].gain.value + ' --> ' + options.eq[i].gain);
                     filters[i].gain.value = options.eq[i].gain;
                 }
             }
         } catch(e) {
-            console.error(e);
+            //console.error(e);
         }
     };
     //Get default values
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     //Listen to changes
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-        console.log(request);
+        //console.log(request);
         if (request.action == 'set') {
             //console.log('page.js', 'set', request.eqSettings);
             eq.set({

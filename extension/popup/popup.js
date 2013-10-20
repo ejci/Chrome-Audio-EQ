@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     logger.log('popup.js');
     var eq = CONST.EQ;
     var canvas, context;
-    logger.log(eq);
+    //logger.log(eq);
 
     function getValue(id) {
         return document.getElementById(id).value;
@@ -66,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 xy : 0
             });
         }
-        console.log(points);
         context.beginPath();
         context.moveTo(points[0].x, points[0].y);
         for ( i = 1; i < points.length - 2; i++) {
@@ -91,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var index = getEqIndex(slider);
             var diff = this.value - eq[index].gain;
             eq[index].gain = this.value;
-            logger.log(slider, diff, index);
+            //logger.log(slider, diff, index);
 
             for (var i = 1; i < 10; i++) {
                 diff = diff / 2;
@@ -118,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         //send message
         try {
-            logger.log('popup.js', eq);
+            //logger.log('popup.js', eq);
             chrome.runtime.sendMessage({
                 action : 'set',
                 eq : eq
@@ -167,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     try {
         chrome.storage.local.get(function(items) {
-            logger.log(items, items['eq']);
+            //logger.log(items, items['eq']);
             eq = items['eq'];
             setValue('ch-eq-slider-0', eq[0].gain);
             setValue('ch-eq-slider-1', eq[1].gain);
