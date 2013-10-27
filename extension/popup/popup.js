@@ -118,10 +118,16 @@ document.addEventListener("DOMContentLoaded", function() {
         //send message
         try {
             //logger.log('popup.js', eq);
-            chrome.runtime.sendMessage({
-                action : 'set',
-                eq : eq
-            });
+            if (chrome.runtime) {
+                chrome.runtime.sendMessage({
+                    action : 'set',
+                    eq : eq
+                });
+            } else {
+                //fallback for demo page
+                //TODO:
+                icon.generate(eq);
+            }
         } catch(e) {
             // Psssst! Dont tell anyone :)
         }
@@ -155,19 +161,45 @@ document.addEventListener("DOMContentLoaded", function() {
         //send message
         try {
             //logger.log('popup.js', eqSettings);
-            chrome.runtime.sendMessage({
-                action : 'set',
-                eq : eq
-            });
+            if (chrome.runtime) {
+                chrome.runtime.sendMessage({
+                    action : 'set',
+                    eq : eq
+                });
+            } else {
+                //fallback for demo page
+                //TODO:
+                icon.generate(eq);
+            }
         } catch(e) {
             // :)
         }
     };
 
     try {
-        chrome.storage.local.get(function(items) {
-            //logger.log(items, items['eq']);
-            eq = items['eq'];
+        console.log('chrome.storage', chrome.storage);
+        if (chrome.storage) {
+            chrome.storage.local.get(function(items) {
+                //logger.log(items, items['eq']);
+                eq = items['eq'];
+                setValue('ch-eq-slider-0', eq[0].gain);
+                setValue('ch-eq-slider-1', eq[1].gain);
+                setValue('ch-eq-slider-2', eq[2].gain);
+                setValue('ch-eq-slider-3', eq[3].gain);
+                setValue('ch-eq-slider-4', eq[4].gain);
+                setValue('ch-eq-slider-5', eq[5].gain);
+                setValue('ch-eq-slider-6', eq[6].gain);
+                setValue('ch-eq-slider-7', eq[7].gain);
+                setValue('ch-eq-slider-8', eq[8].gain);
+                setValue('ch-eq-slider-9', eq[9].gain);
+                setValue('ch-eq-slider-10', eq[10].gain);
+                prepareChart();
+
+            });
+        } else {
+            //fallback for demo page
+            eq = CONST.EQ;
+            icon.generate(eq);
             setValue('ch-eq-slider-0', eq[0].gain);
             setValue('ch-eq-slider-1', eq[1].gain);
             setValue('ch-eq-slider-2', eq[2].gain);
@@ -180,8 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
             setValue('ch-eq-slider-9', eq[9].gain);
             setValue('ch-eq-slider-10', eq[10].gain);
             prepareChart();
-        });
-
+        }
     } catch(e) {
         // Psssst! Dont tell anyone :)
     }

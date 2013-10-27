@@ -38,21 +38,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             filters[0].gain.value = 1;
-            //console.log(filters);
-            /*
-             filter32 = createFilter(32, 3);
-             filter64 = createFilter(64, 5);
-             filter125 = createFilter(125, 5);
-             filter250 = createFilter(250, 5);
-             filter500 = createFilter(500, 5);
-             filter1000 = createFilter(1000, 5);
-             filter2000 = createFilter(2000, 5);
-             filter4000 = createFilter(4000, 5);
-             filter8000 = createFilter(8000, 5);
-             filter16000 = createFilter(16000, 4);
-             */
-            initialized = true;
 
+            initialized = true;
             //console.log('eq.init', 'done');
         } catch(e) {
             //console.error('eq.init', e);
@@ -96,12 +83,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             //console.log('eq.attach', 'done');
-
             if (count > 0) {
                 //console.log('eq.attach', 'Attached to ' + count + ' video/audio sources.');
             }
         } catch(e) {
-            //console.error('eq.attach', e);
+            console.error('eq.attach', e);
             //throw e;
         }
     };

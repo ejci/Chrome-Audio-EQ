@@ -2,7 +2,6 @@
 
 //collect logs from others js files that use logger.js
 logger.collect();
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension");
     //console.log(request);
@@ -34,6 +33,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 });
             }
         });
+        icon.generate(items['eq']);
     }
     return true;
 });
@@ -44,6 +44,8 @@ chrome.storage.local.get(function(items) {
     if (!items['eq']) {
         items['eq'] = CONST.EQ;
         chrome.storage.local.set(items);
+
     }
+    icon.generate(items['eq']);
 });
 
