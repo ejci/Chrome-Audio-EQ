@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 //fallback for demo page
                 //TODO:
-                icon.generate(eq);
+                
             }
         } catch(e) {
             // :)
@@ -177,8 +177,8 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     try {
-        console.log('chrome.storage', chrome.storage);
         if (chrome.storage) {
+            console.log('chrome.storage', chrome.storage);
             chrome.storage.local.get(function(items) {
                 //logger.log(items, items['eq']);
                 eq = items['eq'];
@@ -196,10 +196,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 prepareChart();
 
             });
-        } else {
+        } else {            
             //fallback for demo page
             eq = CONST.EQ;
-            icon.generate(eq);
             setValue('ch-eq-slider-0', eq[0].gain);
             setValue('ch-eq-slider-1', eq[1].gain);
             setValue('ch-eq-slider-2', eq[2].gain);

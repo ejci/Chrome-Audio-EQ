@@ -1,14 +1,16 @@
-First proof of concept.
+Chrome Audio EQ
+
+
 
 ###TODO:
-* visualizer
-* icon visualizer
-* on/off
+* performance
 * support for dynamicly loaded audio/video tags
+* support for flash?
 
 
 ##Requirements:
-Install [HTML5ify](https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop)
+For best results install [HTML5ify](https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop). it will force popular sites to use HTML5 instead of flash.
+
 
 ##Test videos:
 ###YouTube:

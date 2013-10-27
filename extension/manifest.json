@@ -1,30 +1,30 @@
 {
-	"name": "Chrome EQ",
-	"description": "Chrome HTML5 Audio Equalizer",
-	"version": "0.2.0",
-	"manifest_version": 2,
-	"permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
-	"background": {
-		"scripts": ["common/logger.js", "common/const.js", "background/icon.js", "background/background.js"]
-	},
-	"browser_action": {
-		"default_title": "Chrome EQ",
-		"default_icon": "128.png",
-		"default_popup": "popup/popup.html"
-	},
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"css": [],
-			"js": ["common/logger.js", "common/const.js", "page/page.js"],
-			"run_at": "document_start",
-			"all_frames": true
-		}
-	],
-	"homepage_url": "http://lab.ejci.net/ChromeEQ",
-	"icons": {
-		"16": "16.png",
-		"48": "48.png",
-		"128": "128.png"
-	}
+        "name": "Chrome EQ",
+        "description": "Chrome HTML5 Audio Equalizer",
+        "version": "0.2.1",
+        "manifest_version": 2,
+        "permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
+        "background": {
+                "scripts": ["common/logger.js", "common/const.js", "common/icon.js", "background/background.js"]
+        },
+        "browser_action": {
+                "default_title": "Chrome EQ",
+                "default_icon": "128.png",
+                "default_popup": "popup/popup.html"
+        },
+        "content_scripts": [
+                {
+                        "matches": ["<all_urls>"],
+                        "css": [],
+                        "js": ["common/logger.js", "common/const.js", "page/page.js"],
+                        "run_at": "document_start",
+                        "all_frames": true
+                }
+        ],
+        "homepage_url": "http://lab.ejci.net/ChromeEQ",
+        "icons": {
+                "16": "16.png",
+                "48": "48.png",
+                "128": "128.png"
+        }
 }
