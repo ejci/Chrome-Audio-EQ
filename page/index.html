@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Chrome Audio EQ - Google Chrome extension">
+        <meta name="author" content="Miroslav Magda">
+
+        <link rel="shortcut icon" type="image/png" href="favicon.png">
+
+        <title>Chrome Audio EQ - Google Chrome extension</title>
+        <meta property="og:title" content="Chrome Audio EQ"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="http://lab.ejci.net/Chrome-Audio-EQ/"/>
+        <meta property="og:description" content="HTML5 Audio Equalizer for Google Chrome"/>
+        <meta property="og:image" content="http://lab.ejci.net/Chrome-Audio-EQ/og-image-app.png"/>
+        <meta property="og:image:type" content="image/png"/>
+        <meta property="og:image:width" content="160"/>
+        <meta property="og:image:height" content="98"/>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+        <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.2.0/respond.js"></script>
+        <![endif]-->
+        <link href="style.css" rel="stylesheet"/>
+    </head>
+
+    <body>
+
+        <div class="navbar-wrapper">
+            <div class="container">
+
+                <div class="navbar navbar-inverse navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">Chrome Audio EQ</a>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav"></ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="https://github.com/ejci/Chrome-Audio-EQ/issues"><i class="fa fa-bug"></i> Issues</a>
+                                </li>
+                                <li>
+                                    <a href="http://lab.ejci.net"><i class="fa fa-list"></i> Other projects</a>
+                                </li>
+                                <li>
+                                    <a href="mailto:magda.miroslav@gmail.com"><i class="fa fa-envelope"></i> Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Carousel
+        ================================================== -->
+        <div id="myCarousel" class="carousel slide">
+            <!-- Indicators -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Chrome Audio EQ<small>v0.2.1</small></h1>
+                            <p>
+                                <a class="btn btn-lg btn-success buttonBig" href="https://github.com/ejci/Chrome-Audio-EQ/"><i class="fa fa-github"></i> View on GitHub</a>
+                                <a class="btn btn-lg btn-success buttonBig" href="https://chrome.google.com/webstore/detail/chrome-audio-eq/lfafdlnjaliaghpjdajmlcnnblkgcefh"><i class="fa fa-floppy-o"></i> Download extension</a>
+                            </p>
+
+                            <h6>With Chrome Audio EQ you can control your audio and video from all tabs in one place.</h6>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.carousel -->
+
+        <div class="container marketing">
+            <p>
+                For best results install <a href="https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop" title="HTML5ify">HTML5ify</a>. It will force popular sites to use HTML5 instead of Flash.
+                <div class="alert alert-warning">
+                    This extension doesn't control Flash or Silverlight audio. It only controls HTML5 audio and video tags.
+                </div>
+            </p>
+            <h4>Test videos</h4>
+            <p>
+                <h5><a name="youtube" class="anchor" href="#youtube"><span class="octicon octicon-link"></span></a>YouTube</h5>
+                <ul>
+                    <li>
+                        <a href="http://www.youtube.com/watch?v=nLwML2PagbY">http://www.youtube.com/watch?v=nLwML2PagbY</a>
+                    </li>
+                    <li>
+                        <a href="http://www.youtube.com/watch?v=Q3iJvJmlwVk">http://www.youtube.com/watch?v=Q3iJvJmlwVk</a>
+                    </li>
+                </ul>
+                <h5><a name="vimeo" class="anchor" href="#vimeo"><span class="octicon octicon-link"></span></a>Vimeo</h5>
+                <ul>
+                    <li>
+                        <a href="http://vimeo.com/watch">http://vimeo.com/watch</a>
+                    </li>
+                    <li>
+                        <a href="http://ff0000.com/about/">http://ff0000.com/about/</a> (Embeded Viemo video)
+                    </li>
+                </ul>
+                <h5><a name="grooveshark" class="anchor" href="#grooveshark"><span class="octicon octicon-link"></span></a>Grooveshark</h5>
+                <ul>
+                    <li>
+                        <a href="http://html5.grooveshark.com/">http://html5.grooveshark.com/</a>
+                    </li>
+                </ul>
+            </p>
+            <h4>Roadmap</h4>
+            <p>
+                <ul>
+                    <li>
+                        Improve performance
+                    </li>
+                    <li>
+                        Better support for dynamicly loaded audio/video tags
+                    </li>
+                    <li>
+                        support for Flash/Silverlight (?)
+                    </li>
+                </ul>
+            </p>
+            <h4>License</h4>
+            <p>
+                All code is open source and dual licensed under <a href="https://raw.github.com/ejci/Chrome-Audio-EQ/master/GPL-LICENSE.txt">GPL</a> and <a href="https://raw.github.com/ejci/Chrome-Audio-EQ/master/MIT-LICENSE.txt">MIT</a>. Check the individual licenses for more information.
+            </p>
+            <hr>
+
+            <!-- FOOTER -->
+            <footer>
+                <p class="pull-right">
+                    <a href="#">Back to top</a>
+                </p>
+                <p>
+                    &copy; 2013 <a href="http://blog.ejci.net">Miroslav Magda</a>
+                </p>
+            </footer>
+
+        </div><!-- /.container -->
+
+        <!-- /container -->
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+        <script src="example.js"></script>
+        <script>
+            (function(i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] ||
+                function() {
+                    (i[r].q = i[r].q || []).push(arguments);
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m);
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-32777257-5', 'ejci.net');
+            ga('send', 'pageview');
+
+        </script>
+    </body>
+</html>
