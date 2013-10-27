@@ -1,15 +1,12 @@
-Chrome Audio EQ
+#Chrome Audio EQ
 
 
-
-###TODO:
-* performance
-* support for dynamicly loaded audio/video tags
-* support for flash?
 
 
 ##Requirements:
 For best results install [HTML5ify](https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop). it will force popular sites to use HTML5 instead of flash.
+
+
 
 
 ##Test videos:
@@ -27,3 +24,16 @@ For best results install [HTML5ify](https://chrome.google.com/webstore/detail/ht
 ###HTML5 video:
 * http://www.videojs.com/
 
+
+##TODO:
+* performance
+* support for dynamicly loaded audio/video tags
+* support for flash?
+
+
+
+Author [Miroslav Magda](http://blog.ejci.net)
+Version 0.2.1
+
+##License
+All code is open source and dual licensed under GPL and MIT. Check the individual licenses for more information.
