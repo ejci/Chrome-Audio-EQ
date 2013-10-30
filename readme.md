@@ -1,6 +1,7 @@
 #Chrome Audio EQ
 
-With [Chrome Audio EQ](https://chrome.google.com/webstore/detail/lfafdlnjaliaghpjdajmlcnnblkgcefh/publish-accepted?hl=en&gl=001) you can control your audio and video from all tabs in one place.
+With [Chrome Audio EQ](https://chrome.google.com/webstore/detail/lfafdlnjaliaghpjdajmlcnnblkgcefh/null) you can control your audio and video from all tabs in one place.
+More info [here](http://lab.ejci.net/Chrome-Audio-EQ/).
 
 For best results install HTML5ify (https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop). 
 It will force popular sites to use HTML5 instead of Flash.

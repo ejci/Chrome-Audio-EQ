@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    logger.log('popup.js');
+    //logger.log('popup.js');
     var eq = CONST.EQ;
     var canvas, context;
     //logger.log(eq);
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 //fallback for demo page
                 //TODO:
-                
+
             }
         } catch(e) {
             // :)
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     try {
         if (chrome.storage) {
-            console.log('chrome.storage', chrome.storage);
+            //console.log('chrome.storage', chrome.storage);
             chrome.storage.local.get(function(items) {
                 //logger.log(items, items['eq']);
                 eq = items['eq'];
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 prepareChart();
 
             });
-        } else {            
+        } else {
             //fallback for demo page
             eq = CONST.EQ;
             setValue('ch-eq-slider-0', eq[0].gain);

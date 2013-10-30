@@ -13,7 +13,7 @@ var icon = (function() {
      * Replace icon
      */
     var replaceIcon = function() {
-        console.log(canvas.toDataURL('image/png'));
+        //console.log(canvas.toDataURL('image/png'));
         if (chrome.browserAction) {
             chrome.browserAction.setIcon({
                 path : canvas.toDataURL('image/png')
@@ -43,7 +43,7 @@ var icon = (function() {
             values.push(val);
         }
         //clear icon
-        console.log(values, eq);
+        //console.log(values, eq);
         context.beginPath();
         context.clearRect(0, 0, size(32), size(32));
         context.closePath();
