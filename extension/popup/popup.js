@@ -78,6 +78,11 @@ document.addEventListener("DOMContentLoaded", function() {
         //context.strokeStyle = 'rgb(180,180,180)';
         context.strokeStyle = 'rgb(50,90,140)';
         context.stroke();
+
+        // CUSTOM: make sure toggle is checked
+        if(eq[0].channelCount === 1){
+            document.getElementById('toggleMono').checked = true;
+        } else document.getElementById('toggleStereo').checked = true;
     };
 
     function onchange() {
@@ -158,6 +163,9 @@ document.addEventListener("DOMContentLoaded", function() {
         setValue('ch-eq-slider-9', eq[9].gain);
         setValue('ch-eq-slider-10', eq[10].gain);
 
+        // CUSTOM : when user presses reset, change it back to stereo
+        eq[0].channelCount = 2;
+
         //send message
         try {
             //logger.log('popup.js', eqSettings);
@@ -176,9 +184,57 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
 
+    // CUSTOM: toggle onclick
+    document.getElementById('toggleMono').onclick = function(){
+        eq[0].channelCount = 1;
+
+                //send message
+        try {
+            //logger.log('popup.js', eqSettings);
+            if (chrome.runtime) {
+                chrome.runtime.sendMessage({
+                    action : 'set',
+                    eq : eq
+                });
+            } else {
+                //fallback for demo page
+                //TODO:
+
+            }
+        } catch(e) {
+            // :)
+        }
+
+    };
+
+    // CUSTOM: toggle onclick
+    document.getElementById('toggleStereo').onclick = function(){
+        eq[0].channelCount = 2;
+
+                //send message
+        try {
+            //logger.log('popup.js', eqSettings);
+            if (chrome.runtime) {
+                chrome.runtime.sendMessage({
+                    action : 'set',
+                    eq : eq
+                });
+            } else {
+                //fallback for demo page
+                //TODO:
+
+            }
+        } catch(e) {
+            // :)
+        }
+
+    };
+
+
+
     try {
         if (chrome.storage) {
-            //console.log('chrome.storage', chrome.storage);
+            // console.log('chrome.storage', chrome.storage);
             chrome.storage.local.get(function(items) {
                 //logger.log(items, items['eq']);
                 eq = items['eq'];

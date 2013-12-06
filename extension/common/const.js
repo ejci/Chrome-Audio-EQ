@@ -9,7 +9,9 @@ var CONST = {};
  */
 CONST.EQ = [{
     label : 'master',
-    gain : 1
+    gain : 1,
+    channelCountMode : 'explicit',
+    channelCount : 2
 }, {
     label : '32',
     f : 32,
