@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             filters[0].gain.value = 1;
+            /* added by Kevin Yuliawan */ filters[0].channelCountMode = 'explicit';
 
             initialized = true;
             //console.log('eq.init', 'done');
@@ -99,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             if (filters[0]) {
                 // console.log(options);
-                filters[0].channelCountMode = 'explicit';
                 filters[0].channelCount = options.eq[0].channelCount;
                 for (var l = filters.length, i = 0; i < l; i++) {
                     //console.log(filters[i].gain.value + ' --> ' + options.eq[i].gain);

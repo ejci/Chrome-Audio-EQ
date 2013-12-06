@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('toggleMono').onclick = function(){
         eq[0].channelCount = 1;
 
-                //send message
+        //send message
         try {
             //logger.log('popup.js', eqSettings);
             if (chrome.runtime) {
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('toggleStereo').onclick = function(){
         eq[0].channelCount = 2;
 
-                //send message
+        //send message
         try {
             //logger.log('popup.js', eqSettings);
             if (chrome.runtime) {
