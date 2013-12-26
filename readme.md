@@ -9,7 +9,8 @@ It will force popular sites to use HTML5 instead of Flash.
 ###Disclaimer
 This extension doesn't control Flash or Silverlight audio. It only controls HTML5 audio and video tags.
 
-
+####Contributors
+[Kevin Yuliawan](https://github.com/kevinyuliawan)
 
 ##Test videos
 ###YouTube:
@@ -35,7 +36,11 @@ This extension doesn't control Flash or Silverlight audio. It only controls HTML
 
 
 Author [Miroslav Magda](http://blog.ejci.net)
-Version 0.2.1
+Version 0.3.0.0
+
+####Contributors
+[Kevin Yuliawan](https://github.com/kevinyuliawan/) 
+
 
 ##License
 All code is open source and dual licensed under GPL and MIT. Check the individual licenses for more information.
