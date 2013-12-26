@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
         //logger.log('popup.js');
         var eq = CONST.EQ;
         var config = CONST.config;
+        var presets = PRESETS;
 
         var canvas, context, inputs;
         //logger.log(eq);
@@ -168,8 +169,10 @@ document.addEventListener("DOMContentLoaded", function() {
             // When user presses reset, change it back to default value (stereo)
             eq[0].channelCount = CONST.EQ[0].channelCount;
             prepareChart();
+            //document.getElementById('presetsSelect').options[0].selected = 'selected';
 
             propagateData();
+
         };
 
         document.getElementById('channels').onclick = function(ev) {
@@ -199,38 +202,26 @@ document.addEventListener("DOMContentLoaded", function() {
             mousedownEvent.initMouseEvent("mousedown");
             document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
         };
-        // CUSTOM: toggle onclick
-        /*document.getElementById('toggleMono').onclick = function() {
-        eq[0].channelCount = 1;
-        //send message
-        try {
-        //logger.log('popup.js', eqSettings);
-        chrome.runtime.sendMessage({
-        action : 'set',
-        eq : eq
-        });
-        } catch(e) {
-        // :)
-        }
+        document.getElementById('presetsSelect').onchange = function(ev) {
+            var preset = presets[parseInt(ev.target.value, 10)];
+            console.log(preset);
+            for (var l = eq.length, i = 1; i < l; i++) {
+                eq[i].gain = preset.gains[i - 1];
+            }
 
-        };*/
-
-        // CUSTOM: toggle onclick
-        /*document.getElementById('toggleStereo').onclick = function() {
-        eq[0].channelCount = 2;
-
-        //send message
-        try {
-        //logger.log('popup.js', eqSettings);
-        chrome.runtime.sendMessage({
-        action : 'set',
-        eq : eq
-        });
-        } catch(e) {
-        // :)
-        }
-
-        };*/
+            setValue('ch-eq-slider-1', eq[1].gain);
+            setValue('ch-eq-slider-2', eq[2].gain);
+            setValue('ch-eq-slider-3', eq[3].gain);
+            setValue('ch-eq-slider-4', eq[4].gain);
+            setValue('ch-eq-slider-5', eq[5].gain);
+            setValue('ch-eq-slider-6', eq[6].gain);
+            setValue('ch-eq-slider-7', eq[7].gain);
+            setValue('ch-eq-slider-8', eq[8].gain);
+            setValue('ch-eq-slider-9', eq[9].gain);
+            setValue('ch-eq-slider-10', eq[10].gain);
+            prepareChart();
+            propagateData();
+        };
 
         //intialization
         try {
@@ -265,6 +256,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById('snap').childNodes[0].classList.add('on');
                     } else {
                         document.getElementById('snap').childNodes[0].classList.remove('on');
+                    }
+
+                    //load EQ presets
+                    for (var l = presets.length, i = 0; i < l; i++) {
+                        var option = document.createElement("option");
+                        option.text = presets[i].name;
+                        option.setAttribute('value', i);
+                        document.getElementById('presetsSelect').add(option, null);
                     }
 
                 });

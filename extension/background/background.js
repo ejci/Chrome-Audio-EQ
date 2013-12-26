@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         items['config'] = request.config;
         //console.log('set', items['eq']);
         chrome.storage.local.set(items);
-        console.log('items',items);
+        console.log('items', items);
 
         chrome.tabs.query({
         }, function(tabs) {

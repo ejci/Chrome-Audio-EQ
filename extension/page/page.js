@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var videos, audios;
     var context, masterNode, filter32, filter64, filter125, filter250, filter500, filter1000, filter2000, filter4000, filter8000, filter16000;
     var initialized = false;
+    var channelCount = 2;
     var eq = {};
     var filters = [];
     eq.init = function() {
@@ -38,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             filters[0].gain.value = 1;
-
             /* added by Kevin Yuliawan */
             filters[0].channelCountMode = 'explicit';
 
@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 //console.log(tags[i], tags[i].getAttribute('eq-attached'));
                 if (tags[i].getAttribute('eq-attached') !== 'true') {
                     source = context.createMediaElementSource(tags[i]);
+                    channelCount = source.channelCount;
                     source.connect(filters[0]);
                     for (var fl = filters.length, j = 0; j < fl - 1; j++) {
                         //console.log(filters[j], filters[j+1]);
@@ -102,14 +103,19 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             if (filters[0]) {
                 // console.log(options);
-                filters[0].channelCount = options.eq[0].channelCount;
+                if (options.config.mono === true) {
+                    filters[0].channelCount = 1;
+                } else {
+                    filters[0].channelCount = channelCount;
+                }
+
                 for (var l = filters.length, i = 0; i < l; i++) {
                     //console.log(filters[i].gain.value + ' --> ' + options.eq[i].gain);
                     filters[i].gain.value = options.eq[i].gain;
                 }
             }
         } catch(e) {
-            //console.error(e);
+            console.error(e);
         }
     };
     //Get default values
@@ -128,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
             //console.log('page.js', 'set', request.eqSettings);
             eq.set({
                 eq : request.eq,
-                config : response.config
+                config : request.config
             });
             sendResponse();
         }
@@ -166,14 +172,9 @@ document.addEventListener("DOMContentLoaded", function() {
     observeDOM(document.getElementsByTagName('body')[0], function() {
         var newVideos = document.getElementsByTagName('video');
         var newAudios = document.getElementsByTagName('audio');
-        //console.log('observeDOM', newVideos.length, newAudios.length);
-        //if (newVideos.length !== videos.length || newAudios.length !== audios.length) {
         eq.attach();
-        //}
     });
 
     //auto init
-
     eq.init();
-    //eq.attach();
 }, false);
