@@ -11,18 +11,19 @@ This extension doesn't control Flash or Silverlight audio. It only controls HTML
 
 ##Test videos
 ###YouTube:
-* http://www.youtube.com/watch?v=nLwML2PagbY
-* http://www.youtube.com/watch?v=Q3iJvJmlwVk
+* [http://www.youtube.com/watch?v=nLwML2PagbY](http://www.youtube.com/watch?v=nLwML2PagbY)
+* [http://www.youtube.com/watch?v=Q3iJvJmlwVk](http://www.youtube.com/watch?v=Q3iJvJmlwVk)
 
 ###Vimeo:
-* http://vimeo.com/watch
-* http://ff0000.com/about/ (Vimeo iframe video)
+* [http://vimeo.com/watch](http://vimeo.com/watch)
+* [http://vimeo.com/11691174](http://vimeo.com/11691174)
+* [http://ff0000.com/about/](http://ff0000.com/about/ ) (Vimeo iframe video)
 
 ###Grooveshark:
-* http://html5.grooveshark.com/
+* [http://html5.grooveshark.com/](http://html5.grooveshark.com/)
 
 ###HTML5 video:
-* http://www.videojs.com/
+* [http://www.videojs.com/](http://www.videojs.com/)
 
 
 ##TODO:

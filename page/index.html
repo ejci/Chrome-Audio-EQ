@@ -43,7 +43,11 @@
                             <a class="navbar-brand" href="#">Chrome Audio EQ</a>
                         </div>
                         <div class="navbar-collapse collapse">
-                            <ul class="nav navbar-nav"></ul>
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="#FAQ">FAQ</a>
+                                </li>
+                            </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
                                     <a href="https://github.com/ejci/Chrome-Audio-EQ/issues"><i class="fa fa-bug"></i> Issues</a>
@@ -84,17 +88,35 @@
             </div>
         </div><!-- /.carousel -->
 
-        <div class="container marketing">
+        <div class="container marketing" id="about">
             <p>
                 For best results install <a href="https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop" title="HTML5ify">HTML5ify</a>. It will force popular sites to use HTML5 instead of Flash.
                 <div class="alert alert-warning">
                     This extension doesn't control Flash or Silverlight audio. It only controls HTML5 audio and video tags.
                 </div>
-            <small>
-                Dear Google. If you have any spare Chromebook Pixel please send it to me so I can test it on Chrome OS :)
-            </small>
+                Dear Google. If you have a spare Chromebook Pixel please send it to me so I can test it on Chrome OS ;)
             </p>
-            <h4>Test videos</h4>
+            <hr />
+
+            <h4 id="FAQ">FAQ</h4>
+            <p>
+                <h5>Why I dont hear any difference?</h5>
+            <p>
+                This extension works only with HTML5 video or audio. If video or audio is played with flash then EQ will not work.
+            </p>
+            <br/>
+            <p>
+                <h5>Is there any way to force Youtube to use HTML5 video instead of Flash?</h5>
+                Yes it is. Install <a href="https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop" title="HTML5ify">HTML5ify</a> extension. However not all Youtube videos are in HTML5 :(
+            </p>
+            <br/>
+            <p>
+                <h5>Will it work on Mac/Windows/Linux/Chrome OS?</h5>
+                Yes it will.
+            </p>
+            <br/>
+            <hr />
+            <h4 id="test_videos">Test videos</h4>
             <p>
                 <h5><a name="youtube" class="anchor" href="#youtube"><span class="octicon octicon-link"></span></a>YouTube</h5>
                 <ul>
@@ -111,7 +133,10 @@
                         <a href="http://vimeo.com/watch">http://vimeo.com/watch</a>
                     </li>
                     <li>
-                        <a href="http://ff0000.com/about/">http://ff0000.com/about/</a> (Embeded Viemo video)
+                        <a href="http://vimeo.com/11691174">http://vimeo.com/11691174</a>
+                    </li>
+                    <li>
+                        <a href="http://ff0000.com/about/">http://ff0000.com/about/</a> (Embeded Vimeo video)
                     </li>
                 </ul>
                 <h5><a name="grooveshark" class="anchor" href="#grooveshark"><span class="octicon octicon-link"></span></a>Grooveshark</h5>
@@ -121,6 +146,8 @@
                     </li>
                 </ul>
             </p>
+            <hr />
+
             <h4>Roadmap</h4>
             <p>
                 <ul>
@@ -131,10 +158,12 @@
                         Better support for dynamicly loaded audio/video tags
                     </li>
                     <li>
-                        support for Flash/Silverlight (?)
+                        Support for Flash/Silverlight (?)
                     </li>
                 </ul>
             </p>
+            <hr />
+
             <h4>License</h4>
             <p>
                 All code is open source and dual licensed under <a href="https://raw.github.com/ejci/Chrome-Audio-EQ/master/GPL-LICENSE.txt">GPL</a> and <a href="https://raw.github.com/ejci/Chrome-Audio-EQ/master/MIT-LICENSE.txt">MIT</a>. Check the individual licenses for more information.
