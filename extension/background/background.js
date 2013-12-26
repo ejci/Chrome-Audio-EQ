@@ -10,20 +10,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return document.getElementById(id).value;
     };
     //get setting from page
-    if (request.action == 'get') {
+    if (request.action === 'get') {
         chrome.storage.local.get(function(items) {
             sendResponse({
-                eq : items['eq']
+                eq : items['eq'],
+                config : items['config']
             });
         });
 
     }
     //set settings from popup
-    if (request.action == 'set') {
+    if (request.action === 'set') {
         var items = {};
         items['eq'] = request.eq;
+        items['config'] = request.config;
         //console.log('set', items['eq']);
         chrome.storage.local.set(items);
+        console.log('items',items);
 
         chrome.tabs.query({
         }, function(tabs) {
@@ -44,7 +47,10 @@ chrome.storage.local.get(function(items) {
     if (!items['eq']) {
         items['eq'] = CONST.EQ;
         chrome.storage.local.set(items);
-
+    }
+    if (!items['config']) {
+        items['config'] = CONST.CONFIG;
+        chrome.storage.local.set(items);
     }
     icon.generate(items['eq']);
 });

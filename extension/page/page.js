@@ -38,7 +38,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             filters[0].gain.value = 1;
-            /* added by Kevin Yuliawan */ filters[0].channelCountMode = 'explicit';
+
+            /* added by Kevin Yuliawan */
+            filters[0].channelCountMode = 'explicit';
 
             initialized = true;
             //console.log('eq.init', 'done');
@@ -115,7 +117,8 @@ document.addEventListener("DOMContentLoaded", function() {
         action : 'get'
     }, function(response) {
         eq.set({
-            eq : response.eq
+            eq : response.eq,
+            config : response.config
         });
     });
     //Listen to changes
@@ -124,7 +127,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if (request.action == 'set') {
             //console.log('page.js', 'set', request.eqSettings);
             eq.set({
-                eq : request.eq
+                eq : request.eq,
+                config : response.config
             });
             sendResponse();
         }
