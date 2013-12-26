@@ -10,10 +10,10 @@
     </head>
 
     <body class="body">
-        <a href="http://ejci.github.io/Chrome-Audio-EQ/" title="ejci.net" alt="ejci.net" target="_blank" class="info">i</a>
+        <!--a href="http://ejci.github.io/Chrome-Audio-EQ/" title="ejci.net" alt="ejci.net" target="_blank" class="info">i</a-->
 
         <div class="ch-eq-controls">
-            <a href="" class="button" id="reset"> Reset </a>
+            <a href="#" class="button reset" id="reset"> Reset </a>
             <canvas class="ch-eq-chart" id="ch-eq-chart"></canvas>
         </div>
 
@@ -46,11 +46,22 @@
             <tr class="ch-eq ch-eq-label">
                 <td>Preamp</td><td>32</td><td>64</td><td>125</td><td>250</td><td>500</td><td>1k</td><td>2k</td><td>4k</td><td>8k</td><td>16k</td>
             </tr>
-            <tr class="ch-eq ch-eq-label">
-                <td><form><input type="radio" name="toggle" value="mono" id="toggleMono">Mono <br/>
-                    <input type="radio" name="toggle" value="stereo" id="toggleStereo">Stereo</form></td>
-            </tr>
-
         </table>
+        <div class="options">
+            <a href="#" class="button" id="channels"><span class="indicator"></span> Mono </a>
+            <a href="#" class="button" id="snap"><span class="indicator"></span> Snap</a>
+            <a href="http://lab.ejci.net/Chrome-Audio-EQ/" target="_blank" class="button">About</a>
+            <a href="http://lab.ejci.net/Chrome-Audio-EQ/#FAQ" target="_blank" class="button" >Faq</a>
+
+            <a href="#" class="button presets" id="presets">Presets
+            <select id="presetsSelect">
+                <option>aaaaaaaaa adasdas </option>
+                <option>bbb</option>
+                <option>ccc</option>
+                <option>ddddada adas acad adadss</option>
+                <option>eee</option>
+            </select> </a>
+        </div>
+        <div id="console"></div>
     </body>
 </html>
