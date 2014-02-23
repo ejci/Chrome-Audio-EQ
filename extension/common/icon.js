@@ -3,8 +3,8 @@
  */
 var icon = (function() {
 	var canvas, context, w, h;
-	h = w = 128;
 	var px = (window.devicePixelRatio > 1) ? 2 : 1;
+	h = w = px * 128;
 
 	canvas = document.createElement('canvas');
 	canvas.width = w;
