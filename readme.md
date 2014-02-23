@@ -33,7 +33,7 @@ This extension doesn't control Flash or Silverlight audio. It only controls HTML
 
 
 Author [Miroslav Magda](http://blog.ejci.net)
-Version 0.3.0.0
+Version 0.3.1.0
 
 ####Contributors
 [Kevin Yuliawan](https://github.com/kevinyuliawan/) 

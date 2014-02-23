@@ -204,8 +204,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			// When user presses reset, change it back to default value (stereo)
 			eq[0].channelCount = CONST.EQ[0].channelCount;
 			prepareChart();
-			//document.getElementById('presetsSelect').options[0].selected = 'selected';
-
 			propagateData();
 
 		};
