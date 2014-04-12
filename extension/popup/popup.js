@@ -230,6 +230,25 @@ document.addEventListener("DOMContentLoaded", function() {
 			propagateData();
 		};
 
+		document.getElementById('customPreset').onclick = function(ev)
+		{
+			var presetName = prompt('Enter name of new custom preset:');
+
+			PRESETS.push({
+			    name : presetName,
+			    gains : [eq[1].gain, eq[2].gain, eq[3].gain, eq[4].gain, eq[5].gain, eq[6].gain, eq[7].gain, eq[8].gain, eq[9].gain, eq[10].gain]
+			});
+
+			//add new preset to form
+			var option = document.createElement("option");
+			option.text = presets[presets.length-1].name;
+			option.setAttribute('value', presets.length-1);
+			document.getElementById('presetsSelect').add(option, null);
+
+			// I don't think this will permanently hold onto the custom preset, but as long as a google chrome session is active,
+			// these custom presets will be in memory.
+		}
+
 		document.getElementById('presets').onclick = function(ev) {
 			var mousedownEvent = document.createEvent("MouseEvent");
 			mousedownEvent.initMouseEvent("mousedown");
