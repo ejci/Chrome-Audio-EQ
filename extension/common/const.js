@@ -68,44 +68,6 @@ CONST.CONFIG = {
 PRESETS = [];
 
 
-function readTextFile()
-{
-    var xmlhttp;
-
-    if (window.XMLHttpRequest)
-    {
-      xmlhttp = new XMLHttpRequest();
-    }
-    else
-    {
-      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function()
-    {
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-          {
-              var rawData = xmlhttp.responseText; //Grabs raw text input from the text file.
-              var allData = rawData.split(/(?:\t|\n)+/); //Separates data using tabs and newlines as delimiters.
-
-              for (var i = 0; i < allData.length; i += 11) // eleven fields in each preset -- the name and the 10 values for each slider
-              {
-                  //var attr = new attribute(allData[i], allData[i+1]); //Instantiates new attribute object.
-                  //attributes.push(attr); //places location into the attribute array
-                  PRESETS.push({
-                        name : allData[i],
-                        gains : [allData[i+1], allData[i+2], allData[i+3], allData[i+4], allData[i+5], allData[i+6], allData[i+7], allData[i+8], allData[i+9], allData[i+10]]
-                    });
-              }
-          }
-    }
-    xmlhttp.open("GET","presets.txt",true);
-    xmlhttp.send();
-}
-
-readTextFile();
-
-/*
 PRESETS.push({
     name : 'None',
     gains : [0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]
@@ -178,4 +140,3 @@ PRESETS.push({
     name : 'Techno',
     gains : [4.8000, 3.3600, -0.0000, -3.3600, -2.8800, -0.0000, 4.8000, 5.7600, 5.7600, 5.2800]
 });
-*/
