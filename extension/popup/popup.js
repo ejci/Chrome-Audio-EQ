@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		var propagateData = function() {
 			//send message
-			logger.log('popup.js', eq, config);
+			//logger.log('popup.js', eq, config);
 			try {
 				chrome.runtime.sendMessage({
 					action : 'set',
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				chrome.runtime.sendMessage({
 					action : 'get'
 				}, function(response) {
-					logger.log('popup.js', 'response', response);
+					//logger.log('popup.js', 'response', response);
 					eq = response.eq;
 					setValue('ch-eq-slider-0', eq[0].gain);
 					setValue('ch-eq-slider-1', eq[1].gain);

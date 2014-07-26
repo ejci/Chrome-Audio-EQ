@@ -26,13 +26,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         items['config'] = request.config;
         //console.log('set', items['eq']);
         chrome.storage.local.set(items);
-        console.log('items', items);
+        //console.log('items', items);
 
         chrome.tabs.query({
         }, function(tabs) {
             for (var i = 0; i < tabs.length; i++) {
                 chrome.tabs.sendMessage(tabs[i].id, request, function(response) {
-                    // console.log('tab response', response);
+                    //console.log('tab response', response);
                 });
             }
         });
@@ -54,4 +54,3 @@ chrome.storage.local.get(function(items) {
     }
     icon.generate(items['eq']);
 });
-
