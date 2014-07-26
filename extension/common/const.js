@@ -4,6 +4,21 @@
  */
 
 var CONST = {};
+
+/**
+ * EQ filter types
+ */
+CONST.FT = {
+    LOWPASS: "lowpass",
+    HIGHPASS: "highpass",
+    BANDPASS: "bandpass",
+    LOWSHELF: "lowshelf",
+    HIGHSHELF: "highshelf",
+    PEAKING: "peaking",
+    NOTCH: "notch",
+    ALLPASS: "allpass"
+};
+
 /**
  * EQ default values
  */
@@ -14,52 +29,52 @@ CONST.EQ = [{
     label : '32',
     f : 32,
     gain : 0,
-    type : 3
+    type : CONST.FT.LOWSHELF
 }, {
     label : '64',
     f : 64,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '125',
     f : 125,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '250',
     f : 250,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '500',
     f : 500,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '1k',
     f : 1000,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '2k',
     f : 2000,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '4k',
     f : 4000,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '8k',
     f : 8000,
     gain : 0,
-    type : 5
+    type : CONST.FT.PEAKING
 }, {
     label : '16k',
     f : 16000,
     gain : 0,
-    type : 4
+    type : CONST.FT.HIGHSHELF
 }];
 CONST.CONFIG = {
     snap : false,
