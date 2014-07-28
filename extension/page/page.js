@@ -1,189 +1,158 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
-    var _defaultChannelCount = 2;
+	var eq = (function() {
+		var audioContext = new webkitAudioContext();
+		var targets = filters = [];
+		var initialized = false;
 
-    function EQ() {
-        this.targets = [];
-        this.AudioContext = null;
-        this.filters = [];
-        this.initialized = false;
+		var init = function() {
 
-        this.init();
-    }
+			CONST.EQ.forEach(function(node, index) {
+				var filter = false;
+				if (node.f) {
+					// Filter node
+					filter = createFilter(node.f, node.type);
+				} else {
+					// Gain node
+					filter = audioContext.createGain();
+					filter.gain.value = 1;
+					filter.channelCountMode = "explicit";
+				}
+				filters.push(filter);
+			});
 
-    EQ.prototype = {};
-    EQ.prototype.init = function () {
-        //console.log("[EQ]", "Initialization...");
-        var self = this;
-        this.AudioContext = new webkitAudioContext();
-        this.filters = [];
-        CONST.EQ.forEach(function (node, index) {
-            if (node.hasOwnProperty("f")) { // Filter node
-                self.filters.push(self.createFilter(node.f, node.type));
-            } else { // Gain node
-                self.filters.push(self.AudioContext.createGain());
-            }
-        });
-        this.filters[0].gain.value = 1;
-        this.filters[0].channelCountMode = "explicit";
-        this.initialized = true;
-        //console.log("[EQ]", "Initialization completed.");
+			attach();
+		};
 
-        this.attach();
-    };
+		var createFilter = function(freq, type, gainValue) {
+			if (!audioContext) {
+				return;
+			}
+			var filter = audioContext.createBiquadFilter();
+			filter.type = type || CONST.FT.LOWPASS;
+			filter.gain.value = gainValue || 0;
+			filter.Q.value = 1;
+			filter.frequency.value = freq || 0;
+			return filter;
+		};
 
-    EQ.prototype.createFilter = function (freq, type, gainValue) {
-        if (!this.AudioContext) return;
-        var filter = this.AudioContext.createBiquadFilter();
-        filter.type = type || CONST.FT.LOWPASS;
-        filter.gain.value = gainValue || 0;
-        filter.Q.value = 1;
-        filter.frequency.value = freq || 0;
-        return filter;
-    };
+		var attach = function() {
+			if (!initialized || audioContext) {
+				throw new Error("EQ was not initialized correctly!");
+			}
 
-    EQ.prototype.attach = function () {
-        //console.log("[EQ]", "Attaching...");
+			collectTargets();
 
-        if (!this.initialized || !this.AudioContext) {
-            throw new Error("EQ was not initialized correctly!");
-        }
+			var source = false, count = 0;
+			targets.forEach(function(target, index) {
+				if (target.getAttribute("eq-attached") !== "true") {
+					source = audioContext.createMediaElementSource(target);
+					channelCount = source.channelCount;
+					source.connect(filters[0]);
+					var totalFilters = filters.length, index = 0, node;
+					for ( index = 0; index < totalFilters; index++) {
+						node = filters[index + 1];
+						if (node) {
+							filters[index].connect(node);
+						}
+					}
+					filters[filters.length - 1].connect(audioContext.destination);
+					target.setAttribute("eq-attached", "true");
+					count++;
+				}
+			});
+		};
 
-        this.collectTargets();
+		/**
+		 * Collect all video and audio tags
+		 */
+		var collectTargets = function() {
+			var videos = document.getElementsByTagName('video'), audios = document.getElementsByTagName('audio');
 
-        var source = false,
-            count = 0,
-            self = this;
-        this.targets.forEach(function (target, _index) {
-            if (target.getAttribute("eq-attached") !== "true") {
-                source = self.AudioContext.createMediaElementSource(target);
-                channelCount = source.channelCount;
-                source.connect(self.filters[0]);
-                var totalFilters = self.filters.length,
-                    index = 0, node;
-                for (index = 0; index < totalFilters; index++) {
-                    node = self.filters[index + 1];
-                    if (node) {
-                        self.filters[index].connect(node);
-                    }
-                }
-                self.filters[self.filters.length - 1].connect(self.AudioContext.destination);
-                target.setAttribute("eq-attached", "true");
-                count++;
-            }
-        });
-        /*if (count > 0) {
-            console.info("[EQ]", count, " attached elements!");
-        } else {
-            console.info("[EQ]", "No elements where attached!");
-        }*/
-    };
+			function collect(total, collection) {
+				var index;
+				if (total > 0) {
+					for ( index = 0; index < total; index++) {
+						targets.push(collection[index]);
+					}
+				}
+			}
 
-    /**
-     * Collect all video and audio tags
-    */
-    EQ.prototype.collectTargets = function () {
-        var targets = [],
-            videos = document.getElementsByTagName('video'),
-            audios = document.getElementsByTagName('audio');
+			collect(videos.length, videos);
+			collect(audios.length, audios);
 
-        function collect(total, collection) {
-            var index;
-            if (total > 0) {
-                for (index = 0; index < total; index++) {
-                    targets.push(collection[index]);
-                }
-            }
-        }
+		};
 
-        collect(videos.length, videos);
-        collect(audios.length, audios);
+		/**
+		 * @param {Object}
+		 */
+		var set = function(options) {
+			if (filters.length !== 0 && options && options.eq) {
 
-        //console.log("[EQ]", "Targets collected. Total: ", targets.length);
-        this.targets = targets;
-        return this;
-    };
+				if (options.config && options.config.mono && options.config.mono === true) {
+					filters[0].channelCount = 1;
+				} else {
+					filters[0].channelCount = 2;
+				}
 
-    /**
-     * @param {Object}
-    */
-    EQ.prototype.set = function (options) {
-        if (this.filters.length === 0 ||
-            !options.hasOwnProperty("eq")) {
-            return;
-        }
+				filters.forEach(function(filter, index) {
+					filter.gain.value = options.eq[index].gain;
+				});
+			}
+		};
 
-        if (options.hasOwnProperty("config")) {
-            if (options.config.hasOwnProperty("mono") &&
-                options.config.mono === true) {
-                this.filters[0].channelCount = 1;
-            } else {
-                this.filters[0].channelCount = _defaultChannelCount;
-            }
-        }
+		init();
 
-        this.filters.forEach(function (filter, index) {
-            filter.gain.value = options.eq[index].gain;
-        });
-    };
+		return {
+			init : init,
+			createFilter : createFilter,
+			attach : attach,
+			collectTargets : collectTargets,
+			set : set
+		};
+	})();
 
-    try {
-        var eq = new EQ();
+	try {
+		var handleMutation = false, observer = false;
+		//Get default values
+		chrome.runtime.sendMessage({
+			action : 'get'
+		}, function(response) {
+			eq.set({
+				eq : response.eq,
+				config : response.config
+			});
+		});
+		//Listen to changes
+		chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+			if (request.action == 'set') {
+				eq.set({
+					eq : request.eq,
+					config : request.config
+				});
+				sendResponse();
+			}
+		});
 
-        //Get default values
-        chrome.runtime.sendMessage({
-            action : 'get'
-        }, function(response) {
-            eq.set({
-                eq : response.eq,
-                config : response.config
-            });
-        });
-        //Listen to changes
-        chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-            if (request.action == 'set') {
-                eq.set({
-                    eq : request.eq,
-                    config : request.config
-                });
-                sendResponse();
-            }
-        });
+		handleMutation = function(mutations, observer) {
+			if (mutations[0].addedNodes.length || mutations[0].removedNodes.length) {
+				try {
+					eq.attach();
+				} catch(e) {
+					//...
+				}
+			}
+		};
 
-        //http://stackoverflow.com/questions/3219758/detect-changes-in-the-dom
-        var ObserveDOM = (function() {
-            var MutationObserver = window.MutationObserver,
-                eventListenerSupported = window.addEventListener;
-            return function(obj, callback) {
-                if (MutationObserver) {
-                    var obs = new MutationObserver(function(mutations, observer) {
-                        if (mutations[0].addedNodes.length ||
-                            mutations[0].removedNodes.length) {
-                            try {
-                                callback();
-                            } catch(e) {
-                                //...
-                            }
-                        }
-                    });
-                    obs.observe(obj, {
-                        childList : true,
-                        subtree : true
-                    });
-                } else if (eventListenerSupported) {
-                    obj.addEventListener('DOMNodeInserted', callback, false);
-                    obj.addEventListener('DOMNodeRemoved', callback, false);
-                }
-            };
-        })();
+		observer = new MutationObserver(handleMutation);
+		observer.observe(window.document.body, {
+			childList : true,
+			subtree : true
+		});
 
-        ObserveDOM(window.document.body, function () {
-            eq.attach();
-        });
-
-    } catch (e) {
-        //console.error("[EQ]", e);
-        throw e;
-    }
+	} catch (e) {
+		//console.error("[EQ]", e);
+		throw e;
+	}
 
 });
