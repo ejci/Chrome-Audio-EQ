@@ -212,9 +212,59 @@ document.addEventListener("DOMContentLoaded", function() {
 			config.mono = !config.mono;
 			if (config.mono === true) {
 				document.getElementById('channels').childNodes[0].classList.add('on');
-			} else {
+				document.getElementById('channels2').childNodes[0].classList.remove('on');
+				document.getElementById('channels21').childNodes[0].classList.remove('on');
+				document.getElementById('channels51').childNodes[0].classList.remove('on');
+				document.getElementById('channels40').childNodes[0].classList.remove('on');
+			} else {}
+			//logger.log(config);
+			propagateData();
+		};
+		document.getElementById('channels2').onclick = function(ev) {
+			config.stereo = !config.stereo;
+			if (config.stereo === true) {
+				document.getElementById('channels2').childNodes[0].classList.add('on');
 				document.getElementById('channels').childNodes[0].classList.remove('on');
-			}
+				document.getElementById('channels21').childNodes[0].classList.remove('on');
+				document.getElementById('channels51').childNodes[0].classList.remove('on');
+				document.getElementById('channels40').childNodes[0].classList.remove('on');
+			} else {}
+			//logger.log(config);
+			propagateData();
+		};
+		document.getElementById('channels21').onclick = function(ev) {
+			config.multi21 = !config.multi21;
+			if (config.mono === true) {
+				document.getElementById('channels21').childNodes[0].classList.add('on');
+				document.getElementById('channels').childNodes[0].classList.remove('on');
+				document.getElementById('channels2').childNodes[0].classList.remove('on');
+				document.getElementById('channels51').childNodes[0].classList.remove('on');
+				document.getElementById('channels40').childNodes[0].classList.remove('on');
+			} else {}
+			//logger.log(config);
+			propagateData();
+		};
+		document.getElementById('channels40').onclick = function(ev) {
+			config.multi40 = !config.multi40;
+			if (config.mono === true) {
+				document.getElementById('channels40').childNodes[0].classList.add('on');
+				document.getElementById('channels').childNodes[0].classList.remove('on');
+				document.getElementById('channels2').childNodes[0].classList.remove('on');
+				document.getElementById('channels51').childNodes[0].classList.remove('on');
+				document.getElementById('channels21').childNodes[0].classList.remove('on');
+			} else {}
+			//logger.log(config);
+			propagateData();
+		};
+		document.getElementById('channels51').onclick = function(ev) {
+			config.multi51 = !config.multi51;
+			if (config.mono === true) {
+				document.getElementById('channels51').childNodes[0].classList.add('on');
+				document.getElementById('channels').childNodes[0].classList.remove('on');
+				document.getElementById('channels2').childNodes[0].classList.remove('on');
+				document.getElementById('channels21').childNodes[0].classList.remove('on');
+				
+			} else {}
 			//logger.log(config);
 			propagateData();
 		};
@@ -282,9 +332,39 @@ document.addEventListener("DOMContentLoaded", function() {
 					// CUSTOM: make sure toggle is checked
 					if (config.mono) {
 						document.getElementById('channels').childNodes[0].classList.add('on');
-					} else {
+						document.getElementById('channels2').childNodes[0].classList.remove('on');
+						document.getElementById('channels21').childNodes[0].classList.remove('on');
+						document.getElementById('channels51').childNodes[0].classList.remove('on');
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
+					if (config.stereo) {
+						document.getElementById('channels2').childNodes[0].classList.add('on');
 						document.getElementById('channels').childNodes[0].classList.remove('on');
-					}
+						document.getElementById('channels21').childNodes[0].classList.remove('on');
+						document.getElementById('channels51').childNodes[0].classList.remove('on');
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
+					if (config.multi21) {
+						document.getElementById('channels21').childNodes[0].classList.add('on');
+						document.getElementById('channels').childNodes[0].classList.remove('on');
+						document.getElementById('channels2').childNodes[0].classList.remove('on');
+						document.getElementById('channels51').childNodes[0].classList.remove('on');
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
+					if (config.multi40) {
+						document.getElementById('channels40').childNodes[0].classList.add('on');
+						document.getElementById('channels').childNodes[0].classList.remove('on');
+						document.getElementById('channels2').childNodes[0].classList.remove('on');
+						document.getElementById('channels51').childNodes[0].classList.remove('on');
+						document.getElementById('channels21').childNodes[0].classList.remove('on');
+					} else {}
+					if (config.multi51) {
+						document.getElementById('channels51').childNodes[0].classList.add('on');
+						document.getElementById('channels').childNodes[0].classList.remove('on');
+						document.getElementById('channels2').childNodes[0].classList.remove('on');
+						document.getElementById('channels21').childNodes[0].classList.remove('on');
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
 					if (config.snap) {
 						document.getElementById('snap').childNodes[0].classList.add('on');
 					} else {
