@@ -215,7 +215,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				document.getElementById('channels2').childNodes[0].classList.remove('on');
 				document.getElementById('channels21').childNodes[0].classList.remove('on');
 				document.getElementById('channels51').childNodes[0].classList.remove('on');
-			}
+				document.getElementById('channels40').childNodes[0].classList.remove('on');
+			} else {}
 			//logger.log(config);
 			propagateData();
 		};
@@ -226,7 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				document.getElementById('channels').childNodes[0].classList.remove('on');
 				document.getElementById('channels21').childNodes[0].classList.remove('on');
 				document.getElementById('channels51').childNodes[0].classList.remove('on');
-			} 
+				document.getElementById('channels40').childNodes[0].classList.remove('on');
+			} else {}
 			//logger.log(config);
 			propagateData();
 		};
@@ -237,7 +239,20 @@ document.addEventListener("DOMContentLoaded", function() {
 				document.getElementById('channels').childNodes[0].classList.remove('on');
 				document.getElementById('channels2').childNodes[0].classList.remove('on');
 				document.getElementById('channels51').childNodes[0].classList.remove('on');
-			} 
+				document.getElementById('channels40').childNodes[0].classList.remove('on');
+			} else {}
+			//logger.log(config);
+			propagateData();
+		};
+		document.getElementById('channels40').onclick = function(ev) {
+			config.multi40 = !config.multi40;
+			if (config.mono === true) {
+				document.getElementById('channels40').childNodes[0].classList.add('on');
+				document.getElementById('channels').childNodes[0].classList.remove('on');
+				document.getElementById('channels2').childNodes[0].classList.remove('on');
+				document.getElementById('channels51').childNodes[0].classList.remove('on');
+				document.getElementById('channels21').childNodes[0].classList.remove('on');
+			} else {}
 			//logger.log(config);
 			propagateData();
 		};
@@ -249,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				document.getElementById('channels2').childNodes[0].classList.remove('on');
 				document.getElementById('channels21').childNodes[0].classList.remove('on');
 				
-			} 
+			} else {}
 			//logger.log(config);
 			propagateData();
 		};
@@ -320,25 +335,36 @@ document.addEventListener("DOMContentLoaded", function() {
 						document.getElementById('channels2').childNodes[0].classList.remove('on');
 						document.getElementById('channels21').childNodes[0].classList.remove('on');
 						document.getElementById('channels51').childNodes[0].classList.remove('on');
-					} 
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
 					if (config.stereo) {
 						document.getElementById('channels2').childNodes[0].classList.add('on');
 						document.getElementById('channels').childNodes[0].classList.remove('on');
 						document.getElementById('channels21').childNodes[0].classList.remove('on');
 						document.getElementById('channels51').childNodes[0].classList.remove('on');
-					} 
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
 					if (config.multi21) {
 						document.getElementById('channels21').childNodes[0].classList.add('on');
 						document.getElementById('channels').childNodes[0].classList.remove('on');
 						document.getElementById('channels2').childNodes[0].classList.remove('on');
 						document.getElementById('channels51').childNodes[0].classList.remove('on');
-					} 
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
+					if (config.multi40) {
+						document.getElementById('channels40').childNodes[0].classList.add('on');
+						document.getElementById('channels').childNodes[0].classList.remove('on');
+						document.getElementById('channels2').childNodes[0].classList.remove('on');
+						document.getElementById('channels51').childNodes[0].classList.remove('on');
+						document.getElementById('channels21').childNodes[0].classList.remove('on');
+					} else {}
 					if (config.multi51) {
 						document.getElementById('channels51').childNodes[0].classList.add('on');
 						document.getElementById('channels').childNodes[0].classList.remove('on');
 						document.getElementById('channels2').childNodes[0].classList.remove('on');
 						document.getElementById('channels21').childNodes[0].classList.remove('on');
-					} 
+						document.getElementById('channels40').childNodes[0].classList.remove('on');
+					} else {}
 					if (config.snap) {
 						document.getElementById('snap').childNodes[0].classList.add('on');
 					} else {
