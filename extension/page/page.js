@@ -121,6 +121,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.filters[0].channelCount = _defaultChannelCount;
             }
         }
+        if (options.hasOwnProperty("config")) {
+            if (options.config.hasOwnProperty("multi51") &&
+                options.config.multi51 === true) {
+                this.filters[0].channelCount = 6;
+                this.filters[0].channelInterpretation = Speakers;
+                this.filters[0].output.L = input.L;
+                this.filters[0].output.R = input.R;
+                this.filters[0].output.C = 0.5 * (input.L + input.R);
+                this.filters[0].output.LFE = 0.5 * (input.L + input.R);
+                this.filters[0].output.SL = input.L;
+                this.filters[0].output.SR = input.R;
+                
+            } else {
+                this.filters[0].channelCount = _defaultChannelCount;
+            }
+        }
 
         this.filters.forEach(function (filter, index) {
             filter.gain.value = options.eq[index].gain;
