@@ -59,6 +59,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				//console.log('target', target, index);
 				if (target.getAttribute("eq-attached") !== "true") {
 					source = audioContext.createMediaElementSource(target);
+					//read the source channel count
+					filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
+
 					source.connect(filters[0]);
 					var totalFilters = filters.length, index = 0, node;
 					for ( index = 0; index < totalFilters; index++) {
@@ -102,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				if (options.config && options.config.mono && options.config.mono === true) {
 					filters[0].channelCount = 1;
 				} else {
-					filters[0].channelCount = 2;
+					filters[0].channelCount = filters[0]._defaultChannelCount;
 				}
 				filters.forEach(function(filter, index) {
 					filter.gain.value = options.eq[index].gain;
