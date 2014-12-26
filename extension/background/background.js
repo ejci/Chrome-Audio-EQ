@@ -1,10 +1,9 @@
 //console.log('background.js');
-
 //collect logs from others js files that use logger.js
 logger.collect();
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	//console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension");
-	//console.log(request);
 	function getValue(id) {
 		//console.log(id, document.getElementById(id).value);
 		return document.getElementById(id).value;
@@ -24,9 +23,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		var items = {};
 		items['eq'] = request.eq;
 		items['config'] = request.config;
-		//console.log('set', items['eq']);
 		chrome.storage.local.set(items);
-		//console.log('items', items);
 
 		chrome.tabs.query({
 		}, function(tabs) {
@@ -41,15 +38,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	return true;
 });
 
-chrome.storage.local.get(function(items) {
-	//Default value
-	if (!items['eq']) {
-		items['eq'] = CONST.EQ;
-		chrome.storage.local.set(items);
-	}
-	if (!items['config']) {
-		items['config'] = CONST.CONFIG;
-		chrome.storage.local.set(items);
-	}
-	icon.generate(items['eq']);
+chrome.storage.local.get(function(storage) {
+	//Default values
+	if (storage['version'] !== CONST.VERSION) {
+		storage['eq'] = CONST.EQ;
+		storage['config'] = CONST.CONFIG;
+		storage['version'] = CONST.VERSION;
+	};
+
+	chrome.storage.local.set(storage);
+	icon.generate(storage['eq']);
 });
