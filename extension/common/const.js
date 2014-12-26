@@ -106,7 +106,12 @@ PRESETS.push({
 	gains : [-5.7600, -5.7600, -5.7600, -2.4000, 1.4400, 6.7200, 9.6000, 9.6000, 9.6000, 10.0800]
 });
 PRESETS.push({
-	name : 'Laptop Speakers / Headphones',
+	name : 'Headphones',
+	default : true,
+	gains : [2.8800, 6.7200, 3.3600, -1.9200, -1.4400, 0.9600, 2.8800, 5.7600, 7.6800, 8.6400]
+});
+PRESETS.push({
+	name : 'Laptop Speakers',
 	default : true,
 	gains : [2.8800, 6.7200, 3.3600, -1.9200, -1.4400, 0.9600, 2.8800, 5.7600, 7.6800, 8.6400]
 });
