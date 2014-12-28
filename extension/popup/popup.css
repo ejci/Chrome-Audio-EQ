@@ -46,6 +46,10 @@
 	text-decoration: none;
 	padding: 0;
 }
+.button.custom /* new button I'm adding */
+{
+	width: 66px;
+}
 .button.reset {
 	margin-top: 10px;
 	margin-left: 17px;

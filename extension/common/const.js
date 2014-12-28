@@ -70,6 +70,8 @@ CONST.CONFIG = {
 
 //Default presets (absolute value for gain +/- 12db, TODO: make it relative)
 PRESETS = [];
+
+
 PRESETS.push({
 	name : 'None',
 	default : true,
