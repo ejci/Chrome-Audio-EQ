@@ -43,7 +43,7 @@ var init = function(presets) {
 			canvas.height = px * 120;
 			var context = canvas.getContext('2d');
 			context.beginPath();
-			context.strokeStyle = 'rgb(170,170,170)';
+			context.strokeStyle = 'rgb(128,158,198)';//'rgb(170,170,170)';
 			context.lineWidth = px * 1;
 			var longer = [0, 59, 119];
 			var shorter = [10, 20, 30, 40, 50, 70, 80, 90, 100, 110];
@@ -82,16 +82,16 @@ var init = function(presets) {
 			context.beginPath();
 			context.moveTo(px * 12, px * 20);
 			context.lineTo(px * 300, px * 20);
-			context.lineWidth = px * 0.2;
-			context.strokeStyle = 'rgb(170,170,170)';
+			context.lineWidth = px * 1;
+			context.strokeStyle = 'rgb(229,229,229)';
 			context.stroke();
 			context.beginPath();
 			for (var l = eq.length, i = 0; i < l; i++) {
 				context.moveTo(px * ((i * 32) + 12), px * 5);
 				context.lineTo(px * ((i * 32) + 12), px * 35);
 			}
-			context.lineWidth = px * 0.2;
-			context.strokeStyle = 'rgb(170,170,170)';
+			context.lineWidth = px * 1;
+			context.strokeStyle = 'rgb(229,229,229)';
 			context.stroke();
 			context.beginPath();
 			context.stroke();
