@@ -1,63 +1,91 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <title>Popup Page</title>
-        <link href="http://fonts.googleapis.com/css?family=Rationale" rel="stylesheet" type="text/css">
-        <link href="popup.css" rel="stylesheet" type="text/css">
-        <script type="text/javascript" src="../common/logger.js"></script>
-        <script type="text/javascript" src="../common/const.js"></script>
-        <script type="text/javascript" src="popup.js"></script>
-    </head>
+	<head>
+		<title>Popup Page</title>
+		<link href="http://fonts.googleapis.com/css?family=Rationale" rel="stylesheet" type="text/css">
+		<link href="popup.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="../common/const.js"></script>
+		<script type="text/javascript" src="../common/presets.js"></script>
+		<script type="text/javascript" src="popup.js"></script>
+	</head>
 
-    <body class="body">
-        <!--a href="http://ejci.github.io/Chrome-Audio-EQ/" title="ejci.net" alt="ejci.net" target="_blank" class="info">i</a-->
+	<body class="body">
+		<div class="container">
+			<div class="controls-main">
+				<a href="#" class="button reset" id="reset">Reset</a>
+				<canvas class="chart" id="chart"></canvas>
+			</div>
 
-        <div class="ch-eq-controls">
-            <a href="#" class="button reset" id="reset"> Reset </a>
-            <canvas class="ch-eq-chart" id="ch-eq-chart">
-            </canvas>
-        </div>
-
-        <table class="ch-eq" cellspacing="0" cellpadding="0">
-            <tr class="sliders">
-                <td class="ch-eq-volume">
-                <input id="ch-eq-slider-0" class="ch-eq-slider master" eq="master" type="range" min="0" step="0.01" max="2" value="1">
-                </td><td>
-                <input id="ch-eq-slider-1" class="ch-eq-slider" eq="32" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-2" class="ch-eq-slider" eq="64" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-3" class="ch-eq-slider" eq="125" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-4" class="ch-eq-slider" eq="250" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-5" class="ch-eq-slider" eq="500" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-6" class="ch-eq-slider" eq="1000" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-7" class="ch-eq-slider" eq="2000" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-8" class="ch-eq-slider" eq="4000" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-9" class="ch-eq-slider" eq="8000" type="range" min="-12" step="0.01" max="12" value="0">
-                </td><td>
-                <input id="ch-eq-slider-10" class="ch-eq-slider" eq="16000" type="range" min="-12" step="0.01" max="12" value="0">
-                </td>
-            </tr>
-            <tr class="ch-eq ch-eq-label">
-                <td>Preamp</td><td>32</td><td>64</td><td>125</td><td>250</td><td>500</td><td>1k</td><td>2k</td><td>4k</td><td>8k</td><td>16k</td>
-            </tr>
-        </table>
-        <div class="options">
-            <a href="#" class="button" id="channels"><span class="indicator"></span> Mono </a>
-            <a href="#" class="button" id="snap"><span class="indicator"></span> Snap</a>
-            <a href="http://lab.ejci.net/Chrome-Audio-EQ/" target="_blank" class="button">About</a>
-            <a href="http://lab.ejci.net/Chrome-Audio-EQ/#FAQ" target="_blank" class="button" >Faq</a>
-			<span class="message"></span>
-            <a href="#" class="button presets" id="presets">Presets
-            <select id="presetsSelect">
-            </select> </a>
-        </div>
-        <div id="console"></div>
-    </body>
+			<div class="controls-sliders">
+				<div class="slider master">
+					<input id="ch-eq-slider-0" eq="master" type="range" min="0" step="0.01" max="2" value="1">
+					<label>Preamp</label>
+				</div>
+				<div class="slider empty"></div>
+				<div class="slider">
+					<input id="ch-eq-slider-1" eq="32" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>32</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-2" eq="64" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>64</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-3" eq="125" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>125</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-4" eq="250" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>250</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-5" eq="500" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>500</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-6" eq="1000" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>1k</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-7" eq="2000" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>2k</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-8" eq="4000" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>4k</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-9" eq="8000" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>8k</label>
+				</div>
+				<div class="slider">
+					<input id="ch-eq-slider-10" eq="16000" type="range" min="-12" step="0.01" max="12" value="0">
+					<label>16k</label>
+				</div>
+			</div>
+			<div class="controls-options">
+				<div class="left">
+					<a href="#" class="button indicator" id="channels">Mono</a>
+					<a href="#" class="button indicator" id="snap">Snap</a>
+				</div>
+				<div class="right">
+					<!--span class="preset-name">Rock Rock Rock Ro</span-->
+					<a href="#" class="button presets" id="presets">Presets
+					<select id="presetsSelect">
+						<!--optgroup label="Preset">
+							<option value="-1" action="save">Save</option>
+							<option value="-1" action="save_as">Save as</option>
+							<option value="-1" action="delete">Delete</option>
+							<option value="-1" action="reset">Reset</option>
+						</optgroup-->
+						<optgroup label="Load user preset" id="presetsSelectUserLoad"></optgroup>
+						<optgroup label="Load default preset" id="presetsSelectDefaultLoad"></optgroup>
+						<!--optgroup label="Presets">
+							<option value="-1" action="reset_all">Reset all to default</option>
+						</optgroup->
+					</select> </a>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
