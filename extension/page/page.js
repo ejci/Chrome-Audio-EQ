@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				//As there is a limitation for how many audio context can be run on same page
 				//I need to check if there is a need to create on (if there are audio/vide elements)
 				//it was causing "crack" sound -> https://github.com/ejci/Chrome-Audio-EQ/issues/18
-				audioContext = (audioContext) ? audioContext : new webkitAudioContext();
+				audioContext = new AudioContext();
 			}
 			if (!audioContext) {
 				//no audio context? dont continue...
