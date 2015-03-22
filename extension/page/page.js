@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			collectTargets();
 			if (targets.length > 0) {
 				//As there is a limitation for how many audio context can be run on same page
-				//I need to check if there is a need to create on (if there are audio/vide elements)
-				//it was causing "crack" sound -> https://github.com/ejci/Chrome-Audio-EQ/issues/18
+				//I need to check if there is a need to create on (if there are audio/video elements)
+				//it was causing "crack" sound on page load -> https://github.com/ejci/Chrome-Audio-EQ/issues/18
 				audioContext = new AudioContext();
 			}
 			if (!audioContext) {
