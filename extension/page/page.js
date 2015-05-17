@@ -37,6 +37,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			attach();
 		};
 
+		function getHostName(url) {
+			var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+			if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+				return match[2];
+			} else {
+				return null;
+			}
+		}
+
 		var createFilter = function(freq, type, gainValue) {
 			if (!audioContext) {
 				return;
@@ -69,7 +78,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					//https://code.google.com/p/chromium/issues/detail?id=477364
 					target.setAttribute('crossorigin', 'anonymous');
 					if (target.src) {
-						target.src = '' + target.src;
+						//only reload if domains are not the same (so crossorigin attribute can kick in)
+						if (document.location.hostname == getHostName(target.src)) {
+							target.src = '' + target.src;
+						}
 						source = audioContext.createMediaElementSource(target);
 						target.setAttribute("id", 'test');
 						console.dir(target);
