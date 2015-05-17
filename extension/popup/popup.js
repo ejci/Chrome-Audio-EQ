@@ -1,10 +1,13 @@
+/**
+ * I need to clean this mess...
+ */
+
 var eq = CONST.EQ;
-var config = CONST.config;
+var config = CONST.CONFIG;
+var version = CONST.version;
 
-var init = function(presets) {
+var init = function(prs) {
 	try {
-		var px = (window.devicePixelRatio > 1) ? 2 : 1;
-
 		var canvas, context, inputs;
 
 		function getValue(id) {
@@ -30,108 +33,23 @@ var init = function(presets) {
 				chrome.runtime.sendMessage({
 					action : 'set',
 					eq : eq,
-					config : config
+					config : config,
+					selected : presets.getSelected(),
+					version : version
 				});
 			} catch(e) {
-				// :)
-			}
-
-		};
-		var prepareSliders = function() {
-			var canvas = document.createElement('canvas');
-			canvas.width = px * 30;
-			canvas.height = px * 120;
-			var context = canvas.getContext('2d');
-			context.beginPath();
-			context.strokeStyle = 'rgb(128,158,198)';//'rgb(170,170,170)';
-			context.lineWidth = px * 1;
-			var longer = [0, 59, 119];
-			var shorter = [10, 20, 30, 40, 50, 70, 80, 90, 100, 110];
-			for (var i = 0; i < longer.length; i++) {
-				context.moveTo(px * 2, px * longer[i] + context.lineWidth / 2);
-				context.lineTo(px * 10, px * longer[i] + context.lineWidth / 2);
-				context.moveTo(px * 20, px * longer[i] + context.lineWidth / 2);
-				context.lineTo(px * 28, px * longer[i] + context.lineWidth / 2);
-			}
-			for (var i = 0; i < shorter.length; i++) {
-				context.moveTo(px * 7, px * shorter[i] + context.lineWidth / 2);
-				context.lineTo(px * 10, px * shorter[i] + context.lineWidth / 2);
-				context.moveTo(px * 20, px * shorter[i] + context.lineWidth / 2);
-				context.lineTo(px * 23, px * shorter[i] + context.lineWidth / 2);
-			}
-			context.stroke();
-			context.closePath();
-			var url = canvas.toDataURL('image/png');
-			var head = document.getElementsByTagName('head')[0];
-			var style = document.createElement('style');
-			style.innerHTML += '.controls-sliders .slider{';
-			style.innerHTML += 'background-image: url(' + url + ');';
-			style.innerHTML += 'background-size: 30px 120px;';
-			style.innerHTML += '}';
-			head.appendChild(style);
-		};
-		var prepareChart = function() {
-			canvas = document.getElementById('chart');
-			//330x40
-			console.log(px);
-			canvas.style.width = 315 + 'px';
-			canvas.style.height = 40 + 'px';
-			canvas.width = px * 315;
-			canvas.height = px * 40;
-			context = canvas.getContext('2d');
-			context.beginPath();
-			context.moveTo(px * 12, px * 20);
-			context.lineTo(px * 300, px * 20);
-			context.lineWidth = px * 1;
-			context.strokeStyle = 'rgb(229,229,229)';
-			context.stroke();
-			context.beginPath();
-			for (var l = eq.length, i = 0; i < l; i++) {
-				context.moveTo(px * ((i * 32) + 12), px * 5);
-				context.lineTo(px * ((i * 32) + 12), px * 35);
-			}
-			context.lineWidth = px * 1;
-			context.strokeStyle = 'rgb(229,229,229)';
-			context.stroke();
-			context.beginPath();
-			context.stroke();
-			context.font = px * 8 + 'px Rationale';
-			context.textAlign = 'right';
-			context.fillStyle = 'rgb(50,90,140)';
-			context.fillText('+12', px * 8, px * (6 + 3));
-			context.fillText('-12', px * 8, px * (40 - 3));
-			context.textAlign = 'left';
-			context.fillText('+12', px * 303, px * (6 + 3));
-			context.fillText('-12', px * 303, px * (40 - 3));
-			context.closePath();
-
-			refreshChart();
-		};
-		var refreshChart = function() {
-			var points = [];
-			for (var l = eq.length, i = 1; i < l; i++) {
-				points.push({
-					x : ((i - 1) * 32) + 12,
-					y : 20 - (15 / 12) * eq[i].gain,
-					xc : 0,
-					xy : 0
+				//	throw e;
+				chrome.runtime.sendMessage({
+					action : 'error',
+					source : 'popup.js',
+					error : e
 				});
 			}
-			context.beginPath();
-			context.moveTo(px * points[0].x, px * points[0].y);
-			for ( i = 1; i < points.length - 2; i++) {
-				var xc = (points[i].x + points[i + 1].x) / 2;
-				var yc = (points[i].y + points[i + 1].y) / 2;
-				context.quadraticCurveTo(px * points[i].x, px * points[i].y, px * xc, px * yc);
-			}
-			context.quadraticCurveTo(px * points[i].x, px * points[i].y, px * points[i + 1].x, px * points[i + 1].y);
-			context.lineWidth = px * 1;
-			context.strokeStyle = 'rgb(50,90,140)';
-			context.stroke();
 
 		};
 
 		function onchange() {
+			console.log('onchange');
 			var slider = this.getAttribute('eq');
 			if (slider === 'master') {
 				//master volume change
@@ -141,7 +59,6 @@ var init = function(presets) {
 				var index = getEqIndex(slider);
 				var diff = this.value - eq[index].gain;
 				eq[index].gain = this.value;
-
 				if (config.snap) {
 					for (var i = 1; i < 10; i++) {
 						diff = diff / 2;
@@ -164,13 +81,13 @@ var init = function(presets) {
 				setValue('ch-eq-slider-8', eq[8].gain);
 				setValue('ch-eq-slider-9', eq[9].gain);
 				setValue('ch-eq-slider-10', eq[10].gain);
-				prepareChart();
+				chart.prepareChart(eq);
 			}
 
 			propagateData();
 		};
 
-		inputs = document.getElementsByTagName('input');
+		inputs = document.querySelectorAll('input[type="range"]');
 		for (var i = 0; i < inputs.length; i++) {
 			inputs[i].onchange = onchange;
 			inputs[i].oninput = onchange;
@@ -202,7 +119,9 @@ var init = function(presets) {
 			config.mono = false;
 			document.getElementById('channels').classList.remove('on');
 
-			prepareChart();
+			presets.setSelected();
+			
+			chart.prepareChart(eq);
 			propagateData();
 
 		};
@@ -230,43 +149,150 @@ var init = function(presets) {
 		document.getElementById('presets').onclick = function(ev) {
 
 			//load EQ presets
-			var presetsSelect = document.getElementById('presetsSelectDefaultLoad');
-			presetsSelect.innerHTML = '';
-			for (var l = presets.length, i = 0; i < l; i++) {
-				var option = document.createElement("option");
-				option.text = presets[i].name;
-				option.setAttribute('value', '' + i);
-				presetsSelect.appendChild(option, null);
+			var userPresets = presets.getUsers();
+			var predefinedPresets = presets.getPredefined();
+			var selectedPreset = presets.getSelected();
+			console.log('userPresets', userPresets);
+			console.log('predefinedPresets', predefinedPresets);
+			console.log('selectedPreset', selectedPreset);
+			var userPresetsSelect = document.getElementById('presetsSelectUser');
+			var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
+			userPresetsSelect.innerHTML = '';
+			if (selectedPreset.default == true) {
+				document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
+			} else {
+				document.getElementById('preset_delete').removeAttribute('disabled');
 			}
+			for (var l = userPresets.length, i = 0; i < l; i++) {
+				var option = document.createElement("option");
+				option.text = userPresets[i].name;
+				option.setAttribute('value', 'preset::my::' + option.text);
+				if (presets.isSelected(userPresets[i])) {
+					option.setAttribute('selected', 'selected');
+				}
+				userPresetsSelect.appendChild(option, null);
+			}
+			predefinedPresetsSelect.innerHTML = '';
+			for (var l = predefinedPresets.length, i = 0; i < l; i++) {
+				var option = document.createElement("option");
+				option.text = predefinedPresets[i].name;
+				option.setAttribute('value', 'preset::default::' + option.text);
+				if (presets.isSelected(predefinedPresets[i])) {
+					option.setAttribute('selected', 'selected');
+				}
+				predefinedPresetsSelect.appendChild(option, null);
+			}
+
 			var mousedownEvent = document.createEvent("MouseEvent");
 			mousedownEvent.initMouseEvent("mousedown");
 			document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
 		};
 
 		document.getElementById('presetsSelect').onchange = function(ev) {
-			var preset = presets[parseInt(ev.target.value, 10)];
-			for (var l = eq.length, i = 1; i < l; i++) {
-				eq[i].gain = preset.gains[i - 1];
+			//console.log('ev.target', ev.target);
+			//console.log('val', ev.target.value);
+			var selected = presets.getSelected();
+			var updateEq = function() {
+				for (var i = 0; i < 10; i++) {
+					eq[i + 1].gain = selected.gains[i];
+				}
+				setValue('ch-eq-slider-0', eq[0].gain);
+				setValue('ch-eq-slider-1', eq[1].gain);
+				setValue('ch-eq-slider-2', eq[2].gain);
+				setValue('ch-eq-slider-3', eq[3].gain);
+				setValue('ch-eq-slider-4', eq[4].gain);
+				setValue('ch-eq-slider-5', eq[5].gain);
+				setValue('ch-eq-slider-6', eq[6].gain);
+				setValue('ch-eq-slider-7', eq[7].gain);
+				setValue('ch-eq-slider-8', eq[8].gain);
+				setValue('ch-eq-slider-9', eq[9].gain);
+				setValue('ch-eq-slider-10', eq[10].gain);
+				chart.prepareChart(eq);
+				propagateData();
+
+			};
+			switch (ev.target.value) {
+			case 'action::save':
+				modal.confirm('Do you want to save "' + selected.name + '" preset?', function() {
+					selected.gains[0] = getValue('ch-eq-slider-1');
+					selected.gains[1] = getValue('ch-eq-slider-2');
+					selected.gains[2] = getValue('ch-eq-slider-3');
+					selected.gains[3] = getValue('ch-eq-slider-4');
+					selected.gains[4] = getValue('ch-eq-slider-5');
+					selected.gains[5] = getValue('ch-eq-slider-6');
+					selected.gains[6] = getValue('ch-eq-slider-7');
+					selected.gains[7] = getValue('ch-eq-slider-8');
+					selected.gains[8] = getValue('ch-eq-slider-9');
+					selected.gains[9] = getValue('ch-eq-slider-10');
+					console.log('action::save', selected);
+					presets.setPreset(selected);
+					chrome.storage.sync.set({
+						presets : presets.getAll()
+					});
+				});
+
+				break;
+			case 'action::save_as':
+				modal.prompt('New preset name', function(name) {
+					if (name && name.length > 0) {
+						var preset = JSON.parse(JSON.stringify(selected));
+						preset.name = name;
+						presets.setNewPreset(preset);
+						chrome.storage.sync.set({
+							presets : presets.getAll()
+						});
+					}
+				}, function() {
+				});
+				break;
+			case 'action::delete':
+				modal.confirm('Do you want to delete "' + selected.name + '" preset?', function() {
+					presets.removeByName(selected.name);
+					chrome.storage.sync.set({
+						presets : presets.getAll()
+					});
+				});
+				break;
+			case 'action::reset':
+				modal.confirm('Do you want to reset "' + selected.name + '" preset?', function() {
+					presets.reset(selected.name);
+					presets.setSelected();
+					selected = presets.getSelected();
+					chrome.storage.sync.set({
+						presets : presets.getAll()
+					});
+					updateEq();
+				});
+
+				break;
+			case 'action::reset_all':
+				modal.confirm('Do you want to reset all presets to default state?', function() {
+					presets.resetAll();
+					presets.setSelected();
+					selected = presets.getSelected();
+					chrome.storage.sync.set({
+						presets : presets.getAll()
+					});
+					updateEq();
+				});
+				break;
+			default:
+				var val = (ev.target.value).split('::');
+				presets.setSelected(val[2]);
+				selected = presets.getSelected();
+				chrome.storage.local.set({
+					selected : selected.name
+				});
+				updateEq();
 			}
-
-			setValue('ch-eq-slider-1', eq[1].gain);
-			setValue('ch-eq-slider-2', eq[2].gain);
-			setValue('ch-eq-slider-3', eq[3].gain);
-			setValue('ch-eq-slider-4', eq[4].gain);
-			setValue('ch-eq-slider-5', eq[5].gain);
-			setValue('ch-eq-slider-6', eq[6].gain);
-			setValue('ch-eq-slider-7', eq[7].gain);
-			setValue('ch-eq-slider-8', eq[8].gain);
-			setValue('ch-eq-slider-9', eq[9].gain);
-			setValue('ch-eq-slider-10', eq[10].gain);
-
-			prepareChart();
-			propagateData();
 
 		};
 
 		//intialization
 		try {
+			chart.prepareChart(eq);
+			sliders.prepareSliders(eq);
+
 			if (chrome.runtime) {
 				chrome.runtime.sendMessage({
 					action : 'get'
@@ -296,36 +322,60 @@ var init = function(presets) {
 					} else {
 						document.getElementById('snap').classList.remove('on');
 					}
-					prepareChart();
+					chart.prepareChart(eq);
 
 				});
 			}
-			prepareChart();
-			prepareSliders();
 
 		} catch(e) {
+			//	throw e;
+			chrome.runtime.sendMessage({
+				action : 'error',
+				source : 'popup.js',
+				error : e
+			});
 			// Psssst! Dont tell anyone :)
+			throw e;
 		}
 	} catch(e) {
+		//	throw e;
+		chrome.runtime.sendMessage({
+			action : 'error',
+			source : 'popup.js',
+			error : e
+		});
 		throw e;
 	}
 };
-document.addEventListener("DOMContentLoaded", function() {
+
+//LOAD
+window.addEventListener("load", function() {
 	if (chrome && chrome.storage) {
 		chrome.storage.sync.get('presets', function(data) {
+			console.log('popup.js', 'presets', data);
 			if (data.presets) {
-				init(data.presets);
+				presets.setAll(data.presets);
+				chrome.storage.local.get('selected', function(data) {
+					console.log('popup.js', 'selected', data);
+					if (data.selected) {
+						presets.setSelected(data.selected.name);
+					}
+					init();
+
+				});
+
 			} else {
-				init(CONST.PRESETS);
+				presets.setAll();
+				init();
 				//store it for next time
 				chrome.storage.sync.set({
-					presets : CONST.PRESETS
+					presets : presets.getAll()
 				});
 			}
 		});
 	} else {
-		init(CONST.PRESETS);
+		presets.setAll();
+		init();
 
 	}
-
 });

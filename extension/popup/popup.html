@@ -4,13 +4,17 @@
 		<title>Popup Page</title>
 		<link href="http://fonts.googleapis.com/css?family=Rationale" rel="stylesheet" type="text/css">
 		<link href="popup.css" rel="stylesheet" type="text/css">
+		<link href="modal.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="../common/const.js"></script>
 		<script type="text/javascript" src="../common/presets.js"></script>
+		<script type="text/javascript" src="../common/chart.js"></script>
+		<script type="text/javascript" src="../common/sliders.js"></script>
 		<script type="text/javascript" src="popup.js"></script>
+		<script type="text/javascript" src="modal.js"></script>
 	</head>
 
 	<body class="body">
-		<div class="container">
+		<div class="container" id="content">
 			<div class="controls-main">
 				<a href="#" class="button reset" id="reset">Reset</a>
 				<canvas class="chart" id="chart"></canvas>
@@ -69,23 +73,54 @@
 					<a href="#" class="button indicator" id="snap">Snap</a>
 				</div>
 				<div class="right">
-					<!--span class="preset-name">Rock Rock Rock Ro</span-->
 					<a href="#" class="button presets" id="presets">Presets
 					<select id="presetsSelect">
-						<!--optgroup label="Preset">
-							<option value="-1" action="save">Save</option>
-							<option value="-1" action="save_as">Save as</option>
-							<option value="-1" action="delete">Delete</option>
-							<option value="-1" action="reset">Reset</option>
-						</optgroup-->
-						<optgroup label="Load user preset" id="presetsSelectUserLoad"></optgroup>
-						<optgroup label="Load default preset" id="presetsSelectDefaultLoad"></optgroup>
-						<!--optgroup label="Presets">
-							<option value="-1" action="reset_all">Reset all to default</option>
-						</optgroup->
+						<optgroup label="Preset">
+							<option id="preset_save" value="action::save">Save</option>
+							<option id="preset_save_as" value="action::save_as">Save as</option>
+							<option id="preset_delete" value="action::delete">Delete</option>
+							<option id="preset_reset" value="action::reset">Reset</option>
+						</optgroup>
+						<optgroup label="My presets" id="presetsSelectUser"></optgroup>
+						<optgroup label="Predefined presets" id="presetsSelectPredefined"></optgroup>
+						<optgroup label="Presets">
+							<option id="preset_reset_all" value="action::reset_all">Reset all to default</option>
+						</optgroup>
 					</select> </a>
 				</div>
 			</div>
 		</div>
+
+		<!-- MODAL PROMPT -->
+		<div class="modal" id="modal-prompt">
+			<div class="modal-overlay"></div>
+			<div class="modal-content">
+				<div class="modal-message">
+					dasdas sas
+				</div>
+				<div class="modal-input">
+					<input type="text" class="input" />
+				</div>
+				<div class="modal-buttons">
+					<a href="#" class="button ok">Yes</a>
+					<a href="#" class="button notok">No</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- MODAL CONFIRM -->
+		<div class="modal" id="modal-confirm">
+			<div class="modal-overlay"></div>
+			<div class="modal-content">
+				<div class="modal-message">
+					dasdas sas
+				</div>
+				<div class="modal-buttons">
+					<a href="#" class="button ok">Yes</a>
+					<a href="#" class="button notok">No</a>
+				</div>
+			</div>
+		</div>
+
 	</body>
 </html>
