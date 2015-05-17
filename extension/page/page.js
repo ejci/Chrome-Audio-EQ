@@ -1,5 +1,8 @@
+/**
+ * Script injected into to page
+ */
 document.addEventListener("DOMContentLoaded", function() {
-	//console.log('EQ init...');
+	//console.log('EQ init...', document.location.hostname);
 	var eq = (function() {
 		var audioContext = false;
 		var targets = [];
@@ -67,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 			}
 			collectTargets();
-			//console.log('targets', targets);
 			targets.forEach(function(target, index) {
 				//console.log('target', target, index);
 				if (target.getAttribute("eq-attached") !== "true") {
@@ -77,28 +79,27 @@ document.addEventListener("DOMContentLoaded", function() {
 					//of course this will only work if the video src has Access-Control-Allow-Origin header set :(
 					//https://code.google.com/p/chromium/issues/detail?id=477364
 					target.setAttribute('crossorigin', 'anonymous');
-					if (target.src) {
-						//only reload if domains are not the same (so crossorigin attribute can kick in)
-						if (document.location.hostname == getHostName(target.src)) {
-							target.src = '' + target.src;
-						}
-						source = audioContext.createMediaElementSource(target);
-						target.setAttribute("id", 'test');
-						//console.dir(target);
-						//console.log(audioContext);
-						//console.log(filters);
-						//console.log(source);
-						//read the source channel count
-						filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
-						source.connect(filters[0]);
-						var totalFilters = filters.length, index = 0, node;
-						for ( index = 0; index < totalFilters; index++) {
-							node = filters[index + 1];
-							if (node) {
-								filters[index].connect(node);
-							}
+					//only reload if domains are not the same (so crossorigin attribute can kick in)
+					if (document.location.hostname == getHostName(target.src)) {
+						target.src = '' + target.src;
+					}
+					source = audioContext.createMediaElementSource(target);
+					target.setAttribute("id", 'test');
+					//console.dir(target);
+					//console.log(audioContext);
+					//console.log(filters);
+					//console.log(source);
+					//read the source channel count
+					filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
+					source.connect(filters[0]);
+					var totalFilters = filters.length, index = 0, node;
+					for ( index = 0; index < totalFilters; index++) {
+						node = filters[index + 1];
+						if (node) {
+							filters[index].connect(node);
 						}
 					}
+					//}
 					//console.log(index, totalFilters);
 					filters[filters.length - 1].connect(audioContext.destination);
 
@@ -140,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				if (options.config && options.config.mono && options.config.mono === true) {
 					filters[0].channelCount = 1;
 				} else {
-					filters[0].channelCount = filters[0]._defaultChannelCount;
+					filters[0].channelCount = (filters[0]._defaultChannelCount) ? filters[0]._defaultChannelCount : 2;
 				}
 				filters.forEach(function(filter, index) {
 					filter.gain.value = options.eq[index].gain;
@@ -195,8 +196,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					eq.attach();
 				} catch(e) {
 					//do nothing
+					console.error(e);
 					chrome.runtime.sendMessage({
 						action : 'error',
+						page : document.location.hostname,
 						source : 'page.js',
 						error : e
 					});
@@ -206,9 +209,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		};
 
 		observer = new MutationObserver(handleMutation);
-		observer.observe(window.document.body, {
+		observer.observe((document.body ? document.body : document), {
 			childList : true,
-			subtree : true
+			subtree : true,
+			attributes : false,
+			characterData : false
 		});
 
 	} catch (e) {
@@ -216,6 +221,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		console.error(e);
 		chrome.runtime.sendMessage({
 			action : 'error',
+			page : document.location.hostname,
 			source : 'page.js',
 			error : e
 		});
