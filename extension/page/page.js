@@ -79,31 +79,33 @@ document.addEventListener("DOMContentLoaded", function() {
 					//of course this will only work if the video src has Access-Control-Allow-Origin header set :(
 					//https://code.google.com/p/chromium/issues/detail?id=477364
 					target.setAttribute('crossorigin', 'anonymous');
-					//only reload if domains are not the same (so crossorigin attribute can kick in)
-					if (document.location.hostname == getHostName(target.src)) {
-						target.src = '' + target.src;
-					}
-					source = audioContext.createMediaElementSource(target);
-					target.setAttribute("id", 'test');
-					//console.dir(target);
-					//console.log(audioContext);
-					//console.log(filters);
-					//console.log(source);
-					//read the source channel count
-					filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
-					source.connect(filters[0]);
-					var totalFilters = filters.length, index = 0, node;
-					for ( index = 0; index < totalFilters; index++) {
-						node = filters[index + 1];
-						if (node) {
-							filters[index].connect(node);
+					console.dir(target);
+					if (target.src) {
+						//only reload if domains are not the same (so crossorigin attribute can kick in)
+						if (document.location.hostname == getHostName(target.src)) {
+							target.src = '' + target.src;
 						}
-					}
-					//}
-					//console.log(index, totalFilters);
-					filters[filters.length - 1].connect(audioContext.destination);
+						source = audioContext.createMediaElementSource(target);
+						target.setAttribute("id", 'test');
+						//console.dir(target);
+						//console.log(audioContext);
+						//console.log(filters);
+						//console.log(source);
+						//read the source channel count
+						filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
+						source.connect(filters[0]);
+						var totalFilters = filters.length, index = 0, node;
+						for ( index = 0; index < totalFilters; index++) {
+							node = filters[index + 1];
+							if (node) {
+								filters[index].connect(node);
+							}
+						}
+						//console.log(index, totalFilters);
+						filters[filters.length - 1].connect(audioContext.destination);
 
-					target.setAttribute("eq-attached", "true");
+						target.setAttribute("eq-attached", "true");
+					}
 				}
 			});
 		};
