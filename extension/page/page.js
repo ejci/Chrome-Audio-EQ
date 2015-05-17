@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-	console.log('EQ init...');
+	//console.log('EQ init...');
 	var eq = (function() {
 		var audioContext = false;
 		var targets = [];
@@ -84,9 +84,9 @@ document.addEventListener("DOMContentLoaded", function() {
 						}
 						source = audioContext.createMediaElementSource(target);
 						target.setAttribute("id", 'test');
-						console.dir(target);
-						console.log(audioContext);
-						console.log(filters);
+						//console.dir(target);
+						//console.log(audioContext);
+						//console.log(filters);
 						//console.log(source);
 						//read the source channel count
 						filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
 							}
 						}
 					}
-					console.log(index, totalFilters);
+					//console.log(index, totalFilters);
 					filters[filters.length - 1].connect(audioContext.destination);
 
 					target.setAttribute("eq-attached", "true");
