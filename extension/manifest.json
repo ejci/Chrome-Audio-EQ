@@ -1,11 +1,11 @@
 {
 	"name": "Audio EQ",
 	"description": "HTML5 Audio Equalizer for Chrome",
-	"version": "0.3.1.1",
+	"version": "0.3.2.0",
 	"manifest_version": 2,
 	"permissions": ["tabs", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
 	"background": {
-		"scripts": [ "common/const.js", "common/icon.js", "background/background.js"]
+		"scripts": ["common/const.js", "common/icon.js", "background/background.js"]
 	},
 	"browser_action": {
 		"default_title": "Audio EQ",
