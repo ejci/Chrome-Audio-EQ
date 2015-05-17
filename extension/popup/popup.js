@@ -120,7 +120,7 @@ var init = function(prs) {
 			document.getElementById('channels').classList.remove('on');
 
 			presets.setSelected();
-			
+
 			chart.prepareChart(eq);
 			propagateData();
 
