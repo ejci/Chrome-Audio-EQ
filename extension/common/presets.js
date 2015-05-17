@@ -4,7 +4,7 @@ var presets = (function() {
 
 	var getByName = function(name, presetList) {
 		presetList = presetList ? presetList : list;
-		name = (name) ?''+ name : '';
+		name = (name) ? '' + name : '';
 		for (var i = 0, l = presetList.length; i < l; i++) {
 			if (presetList[i].name.toLowerCase() === name.toLowerCase()) {
 				return presetList[i];
@@ -14,7 +14,7 @@ var presets = (function() {
 	};
 
 	var removeByName = function(name) {
-		name = (name) ? ''+name : '';
+		name = (name) ? '' + name : '';
 		for (var i = 0, l = list.length; i < l; i++) {
 			if (list[i].name.toLowerCase() === name.toLowerCase() && list[i].default !== true) {
 				list.splice(i, 1);
@@ -52,6 +52,11 @@ var presets = (function() {
 		return ret;
 	};
 	var setPreset = function(preset) {
+		for (var i = 0, l = list.length; i < l; i++) {
+			if (list[i].name == preset.name) {
+				list[i] = preset;
+			}
+		}
 	};
 	var setNewPreset = function(preset) {
 		delete preset['default'];
@@ -85,11 +90,16 @@ var presets = (function() {
 	};
 
 	var reset = function(name) {
-		var oldPreset = getByName(name, presetList);
-		var preset = getByName(name);
-		preset = oldPreset;
-		//TODO:
+		var oldPreset = getByName(name, JSON.parse(JSON.stringify(CONST.PRESETS)));
+		//var preset = getByName(name);
+		for (var i = 0, l = list.length; i < l; i++) {
+			if (list[i].name == name) {
+				list[i] = oldPreset;
+			}
+		}
+		return oldPreset;
 	};
+
 	var resetAll = function() {
 		list = JSON.parse(JSON.stringify(CONST.PRESETS));
 		console.log('list', list);
