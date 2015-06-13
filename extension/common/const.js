@@ -2,6 +2,9 @@
  * Constants shared across extension
  */
 
+/* global window */
+'use strict';
+
 var CONST = {};
 
 CONST.VERSION = 1;
