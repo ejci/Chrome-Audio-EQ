@@ -1,3 +1,8 @@
+/* global window,
+          document
+                  */
+'use strict';
+
 var chart = (function() {
 	var canvas, context;
 	var px = (window.devicePixelRatio > 1) ? 2 : 1;

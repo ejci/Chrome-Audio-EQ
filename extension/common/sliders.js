@@ -1,3 +1,8 @@
+/*global  document,
+          window
+                    */
+'use strict'; 
+
 var sliders = (function(eq) {
 	var canvas, context;
 	var px = (window.devicePixelRatio > 1) ? 2 : 1;
@@ -12,13 +17,14 @@ var sliders = (function(eq) {
 		context.lineWidth = px * 1;
 		var longer = [0, 59, 119];
 		var shorter = [10, 20, 30, 40, 50, 70, 80, 90, 100, 110];
-		for (var i = 0; i < longer.length; i++) {
+    var i;
+		for (i = 0; i < longer.length; i++) {
 			context.moveTo(px * 2, px * longer[i] + context.lineWidth / 2);
 			context.lineTo(px * 10, px * longer[i] + context.lineWidth / 2);
 			context.moveTo(px * 20, px * longer[i] + context.lineWidth / 2);
 			context.lineTo(px * 28, px * longer[i] + context.lineWidth / 2);
 		}
-		for (var i = 0; i < shorter.length; i++) {
+		for (i = 0; i < shorter.length; i++) {
 			context.moveTo(px * 7, px * shorter[i] + context.lineWidth / 2);
 			context.lineTo(px * 10, px * shorter[i] + context.lineWidth / 2);
 			context.moveTo(px * 20, px * shorter[i] + context.lineWidth / 2);

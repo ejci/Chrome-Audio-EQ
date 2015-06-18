@@ -1,3 +1,6 @@
+/* global document */
+'use strict';
+
 var modal = (function() {
 	var confirm = function confirm(message, ok, notok) {
 		ok = ok ? ok : function() {

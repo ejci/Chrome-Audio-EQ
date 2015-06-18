@@ -1,7 +1,14 @@
 /**
  * Script injected into to page
  */
-document.addEventListener("DOMContentLoaded", function() {
+/* global window,
+          chrome,
+          document,
+          CONST
+                  */
+
+document.addEventListener("DOMContentLoaded", function onDocLoad() {
+  'use strict';
 	//console.log('EQ init...', document.location.hostname);
 	var eq = (function() {
 		var audioContext = false;
@@ -42,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		function getHostName(url) {
 			var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
-			if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+			if (match !== null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
 				return match[2];
 			} else {
 				return null;
@@ -94,11 +101,12 @@ document.addEventListener("DOMContentLoaded", function() {
 						//read the source channel count
 						filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
 						source.connect(filters[0]);
-						var totalFilters = filters.length, index = 0, node;
-						for ( index = 0; index < totalFilters; index++) {
-							node = filters[index + 1];
+            // 'index' is array index passed into targets.forEach above, using 'i' instead
+						var totalFilters = filters.length, node; 
+						for ( var i = 0; i < totalFilters; i++) {
+							node = filters[i + 1];
 							if (node) {
-								filters[index].connect(node);
+								filters[i].connect(node);
 							}
 						}
 						//console.log(index, totalFilters);
