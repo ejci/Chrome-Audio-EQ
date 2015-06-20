@@ -25,49 +25,12 @@ var init = function(prs) {
     document.getElementById(id).value = val;
   }
 
-  function getEqIndex(f) {
-    for (var l = eq.length, i = 0; i < l; i++) {
-      if (eq[i].f && eq[i].f + '' === f) {
-        return i;
-      }
-    }
-    return false;
-  }
-
   function setAllEqSliders () {
     for (var i = 0; i < eq.length; i++)
       setValue('ch-eq-slider-' + i, eq[i].gain);
   }
 
-  function onchange(evt) {
-    console.log('onchange');
-    var slider = evt.target.getAttribute('eq');
-    if (slider === 'master') {
-      //master volume change
-      eq[0].gain = getValue('ch-eq-slider-0');
-    } else {
-      //eq settings change
-      var index = getEqIndex(slider);
-      var diff = evt.target.value - eq[index].gain;
-      eq[index].gain = evt.target.value;
-      if (config.snap) {
-        for (var i = 1; i < 10; i++) {
-          diff = diff / 2;
-          if (eq[index - i] && eq[index - i].f) {
-            eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
-          }
-          if (eq[index + i] && eq[index + i].f) {
-            eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
-          }
-        }
-      }
-      setAllEqSliders();
-      chart.prepareChart(eq);
-    }
-    propagateData();
-  }
-
-	var propagateData = function() {
+  function propagateData () {
 		//send message
 		chrome.runtime.sendMessage({
 			action : 'set',
@@ -76,32 +39,59 @@ var init = function(prs) {
 			selected : presets.getSelected(),
 			version : version
 		});
-	};
-
-	var inputs = document.querySelectorAll('input[type="range"]');
-	for (var i = 0; i < inputs.length; i++) {
-		inputs[i].onchange = onchange;
-		inputs[i].oninput = onchange;
 	}
 
-	//TODO: dont repeat yor self!
-	document.getElementById('reset').onclick = function() {
-		for (var i = 0; i < eq.length; i++) {
-			if (eq[i].f) {
-				eq[i].gain = 0;
-			} else {
-				eq[i].gain = 1;
-			}
-		}
+  function snapSliders(index, diff){
+    for (var i = 1; i < 10; i++) {
+      diff = diff / 2;
+      if (eq[index - i] && eq[index - i].f) {
+        eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
+      }
+      if (eq[index + i] && eq[index + i].f) {
+        eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
+      }
+    }
+  }
 
+  function onSliderChange(evt) {
+    // console.log('onchange');
+    var slider = evt.target.getAttribute('eq');
+    if (slider === 'master') { //master volume
+      eq[0].gain = getValue('ch-eq-slider-0');
+    } else {
+      //eq settings
+      var index = evt.target.id.match(/\d+/); // matches numeric part of id
+      var diff = evt.target.value - eq[index].gain;
+      eq[index].gain = evt.target.value;
+      if (config.snap) snapSliders(index, diff);
+      setAllEqSliders();
+      chart.prepareChart(eq);
+    }
+    propagateData();
+  }
+
+	var sliderInputs = document.querySelectorAll('input[type="range"]');
+	for (var i = 0; i < sliderInputs.length; i++) {
+		sliderInputs[i].onchange = onSliderChange;
+		sliderInputs[i].oninput = onSliderChange;
+	}
+
+	document.getElementById('reset').onclick = function reset() {
+		for (var i = 0; i < eq.length; i++) {
+		  eq[i].gain = 0;
+      if ( ! eq[i].f ) {
+        eq[i].gain = 1; // master
+      }
+		}
     setAllEqSliders();
-		// When user presses reset, change it back to default value (stereo)
+
+    // return to default (stereo)
 		config.mono = false;
 		document.getElementById('channels').classList.remove('on');
-		presets.setSelected();
+
+    presets.setSelected();
 		chart.prepareChart(eq);
 		propagateData();
-
 	};
 
 	document.getElementById('channels').onclick = function(ev) {
@@ -125,7 +115,6 @@ var init = function(prs) {
 	};
 
 	document.getElementById('presets').onclick = function(ev) {
-
 		//load EQ presets
 		var userPresets = presets.getUsers();
 		var predefinedPresets = presets.getPredefined();
@@ -167,6 +156,9 @@ var init = function(prs) {
 		document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
 	};
 
+
+  // TODO: This doesn't handle re-selecting the current preset
+  //        after making some slider changes.
 	document.getElementById('presetsSelect').onchange = function(ev) {
 		//console.log('ev.target', ev.target);
 		//console.log('val', ev.target.value);
@@ -175,12 +167,9 @@ var init = function(prs) {
 			for (var i = 0; i < 10; i++) {
 				eq[i + 1].gain = selected.gains[i];
 			}
-
       setAllEqSliders();
-
 			chart.prepareChart(eq);
 			propagateData();
-
 		};
 		switch (ev.target.value) {
 		case 'action::save':
@@ -189,9 +178,6 @@ var init = function(prs) {
           selected.gains[i] = getValue('ch-eq-slider-' + (i + 1))
 				console.log('action::save', selected);
 				presets.setPreset(selected);
-				chrome.storage.sync.set({
-					presets : presets.getAll()
-				});
 			});
 
 			break;
@@ -200,10 +186,7 @@ var init = function(prs) {
 				if (name && name.length > 0) {
 					var preset = JSON.parse(JSON.stringify(selected));
 					preset.name = name;
-					presets.setNewPreset(preset);
-					chrome.storage.sync.set({
-						presets : presets.getAll()
-					});
+					presets.setNewPreset(preset)
 				}
 			}, function() {
 			});
@@ -211,9 +194,6 @@ var init = function(prs) {
 		case 'action::delete':
 			modal.confirm('Do you want to delete "' + selected.name + '" preset?', function() {
 				presets.removeByName(selected.name);
-				chrome.storage.sync.set({
-					presets : presets.getAll()
-				});
 			});
 			break;
 		case 'action::reset':
@@ -221,21 +201,14 @@ var init = function(prs) {
 				presets.reset(selected.name);
 				presets.setSelected();
 				selected = presets.getSelected();
-				chrome.storage.sync.set({
-					presets : presets.getAll()
-				});
 				updateEq();
 			});
-
 			break;
 		case 'action::reset_all':
 			modal.confirm('Do you want to reset all presets to default state?', function() {
 				presets.resetAll();
 				presets.setSelected();
 				selected = presets.getSelected();
-				chrome.storage.sync.set({
-					presets : presets.getAll()
-				});
 				updateEq();
 			});
 			break;
@@ -248,6 +221,9 @@ var init = function(prs) {
 			});
 			updateEq();
 		}
+    chrome.storage.sync.set({
+      presets : presets.getAll()
+    });
 	};
 
 	//intialization
@@ -259,6 +235,9 @@ var init = function(prs) {
 	}, function(response) {
 		eq = response.eq;
 		setAllEqSliders();
+
+    // TODO make config buttons into checkbox inputs so they can keep
+    //      their own state (might take a few CSS tricks)
 
 		config = response.config;
 		// CUSTOM: make sure toggle is checked
@@ -273,7 +252,6 @@ var init = function(prs) {
 			document.getElementById('snap').classList.remove('on');
 		}
 		chart.prepareChart(eq);
-
 	});
 };
 
