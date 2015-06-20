@@ -69,13 +69,13 @@ var init = function(prs) {
 
 	var propagateData = function() {
 		//send message
-			chrome.runtime.sendMessage({
-				action : 'set',
-				eq : eq,
-				config : config,
-				selected : presets.getSelected(),
-				version : version
-			});
+		chrome.runtime.sendMessage({
+			action : 'set',
+			eq : eq,
+			config : config,
+			selected : presets.getSelected(),
+			version : version
+		});
 	};
 
 	var inputs = document.querySelectorAll('input[type="range"]');
@@ -95,13 +95,10 @@ var init = function(prs) {
 		}
 
     setAllEqSliders();
-
 		// When user presses reset, change it back to default value (stereo)
 		config.mono = false;
 		document.getElementById('channels').classList.remove('on');
-
 		presets.setSelected();
-
 		chart.prepareChart(eq);
 		propagateData();
 
@@ -133,9 +130,9 @@ var init = function(prs) {
 		var userPresets = presets.getUsers();
 		var predefinedPresets = presets.getPredefined();
 		var selectedPreset = presets.getSelected();
-		console.log('userPresets', userPresets);
-		console.log('predefinedPresets', predefinedPresets);
-		console.log('selectedPreset', selectedPreset);
+		// console.log('userPresets', userPresets);
+		// console.log('predefinedPresets', predefinedPresets);
+		// console.log('selectedPreset', selectedPreset);
 		var userPresetsSelect = document.getElementById('presetsSelectUser');
 		var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
 		userPresetsSelect.innerHTML = '';
@@ -251,68 +248,59 @@ var init = function(prs) {
 			});
 			updateEq();
 		}
-
 	};
 
 	//intialization
 	chart.prepareChart(eq);
 	sliders.prepareSliders(eq);
 
-	if (chrome.runtime) {
-		chrome.runtime.sendMessage({
-			action : 'get'
-		}, function(response) {
-			eq = response.eq;
-			setAllEqSliders();
+	chrome.runtime.sendMessage({
+		action : 'get'
+	}, function(response) {
+		eq = response.eq;
+		setAllEqSliders();
 
-			config = response.config;
-			// CUSTOM: make sure toggle is checked
-			if (config.mono) {
-				document.getElementById('channels').classList.add('on');
-			} else {
-				document.getElementById('channels').classList.remove('on');
-			}
-			if (config.snap) {
-				document.getElementById('snap').classList.add('on');
-			} else {
-				document.getElementById('snap').classList.remove('on');
-			}
-			chart.prepareChart(eq);
+		config = response.config;
+		// CUSTOM: make sure toggle is checked
+		if (config.mono) {
+			document.getElementById('channels').classList.add('on');
+		} else {
+			document.getElementById('channels').classList.remove('on');
+		}
+		if (config.snap) {
+			document.getElementById('snap').classList.add('on');
+		} else {
+			document.getElementById('snap').classList.remove('on');
+		}
+		chart.prepareChart(eq);
 
-		});
-	}
+	});
 };
 
 //LOAD
 window.addEventListener("load", function() {
-	if (chrome && chrome.storage) {
-		chrome.storage.sync.get('presets', function(data) {
-			console.log('popup.js', 'presets', data);
-			if (data.presets) {
-				presets.setAll(data.presets);
-				chrome.storage.local.get('selected', function(data) {
-					console.log('popup.js', 'selected', data);
-					if (data.selected) {
-						presets.setSelected(data.selected.name);
-					}
-					init();
+	chrome.storage.sync.get('presets',
+    function(data) {
+  		// console.log('popup.js', 'presets', data);
+  		if (data.presets) {
+  			presets.setAll(data.presets);
+  			chrome.storage.local.get('selected', function(data) {
+  				// console.log('popup.js', 'selected', data);
+  				if (data.selected) {
+  					presets.setSelected(data.selected.name);
+  				}
+  			});
 
-				});
-
-			} else {
-				presets.setAll();
-				init();
-				//store it for next time
-				chrome.storage.sync.set({
-					presets : presets.getAll()
-				});
-			}
-		});
-	} else {
-		presets.setAll();
-		init();
-
-	}
+  		} else {
+  			presets.setAll();
+  			//store it for next time
+  			chrome.storage.sync.set({
+  				presets : presets.getAll()
+  			});
+  		}
+      init();
+  	}
+  );
 });
 
 // currently unsused
