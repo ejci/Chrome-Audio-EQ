@@ -70,10 +70,8 @@ var init = function(prs) {
       propagateData();
     }
 
-	try {
 		var propagateData = function() {
 			//send message
-			try {
 				chrome.runtime.sendMessage({
 					action : 'set',
 					eq : eq,
@@ -81,14 +79,6 @@ var init = function(prs) {
 					selected : presets.getSelected(),
 					version : version
 				});
-			} catch(e) {
-				//	throw e;
-				chrome.runtime.sendMessage({
-					action : 'error',
-					source : 'popup.js',
-					error : e
-				});
-			}
 		};
 
 		var inputs = document.querySelectorAll('input[type="range"]');
@@ -268,7 +258,6 @@ var init = function(prs) {
 		};
 
 		//intialization
-		try {
 			chart.prepareChart(eq);
 			sliders.prepareSliders(eq);
 
@@ -295,26 +284,6 @@ var init = function(prs) {
 
 				});
 			}
-
-		} catch(e) {
-			//	throw e;
-			chrome.runtime.sendMessage({
-				action : 'error',
-				source : 'popup.js',
-				error : e
-			});
-			// Psssst! Dont tell anyone :)
-			throw e;
-		}
-	} catch(e) {
-		//	throw e;
-		chrome.runtime.sendMessage({
-			action : 'error',
-			source : 'popup.js',
-			error : e
-		});
-		throw e;
-	}
 };
 
 //LOAD
@@ -348,3 +317,12 @@ window.addEventListener("load", function() {
 
 	}
 });
+
+// currently unsused
+function forwardErrToBackground(e){
+  chrome.runtime.sendMessage({
+    action : 'error',
+    source : 'popup.js',
+    error : e
+  });
+}
