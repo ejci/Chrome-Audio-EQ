@@ -1,7 +1,8 @@
 /*global  ChromeAudioEQ,
           chrome,
           icon,
-          console
+          console,
+					CONST
                           */
 'use strict';
 
