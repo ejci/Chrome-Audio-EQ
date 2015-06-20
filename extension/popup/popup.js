@@ -1,13 +1,10 @@
-/**
- * I need to clean this mess...
- */
 /*global  window,
           document,
-          ChromeAudioEQ,  
+          ChromeAudioEQ,
           chrome,
           CONST,
           chart,
-          console, 
+          console,
           modal,
           sliders,
           presets
@@ -37,10 +34,12 @@ var init = function(prs) {
       return false;
     }
 
+    function setAllEqSliders () {
+      for (var i = 0; i < eq.length; i++)
+        setValue('ch-eq-slider-' + i, eq[i].gain);
+    }
+
     function onchange(evt) {
-      // Unclear what 'this' is. I could tell jshint to ignore,
-      // but events pass themselves in as first callback arg
-      // 'evt.target' is same object as 'this' and easier to understand 
       console.log('onchange');
       var slider = evt.target.getAttribute('eq');
       if (slider === 'master') {
@@ -63,16 +62,8 @@ var init = function(prs) {
           }
         }
 
-        setValue('ch-eq-slider-1', eq[1].gain);
-        setValue('ch-eq-slider-2', eq[2].gain);
-        setValue('ch-eq-slider-3', eq[3].gain);
-        setValue('ch-eq-slider-4', eq[4].gain);
-        setValue('ch-eq-slider-5', eq[5].gain);
-        setValue('ch-eq-slider-6', eq[6].gain);
-        setValue('ch-eq-slider-7', eq[7].gain);
-        setValue('ch-eq-slider-8', eq[8].gain);
-        setValue('ch-eq-slider-9', eq[9].gain);
-        setValue('ch-eq-slider-10', eq[10].gain);
+        setAllEqSliders();
+
         chart.prepareChart(eq);
       }
 
@@ -80,8 +71,6 @@ var init = function(prs) {
     }
 
 	try {
-		var canvas, context, inputs;
-
 		var propagateData = function() {
 			//send message
 			try {
@@ -100,14 +89,12 @@ var init = function(prs) {
 					error : e
 				});
 			}
-
 		};
 
-		inputs = document.querySelectorAll('input[type="range"]');
+		var inputs = document.querySelectorAll('input[type="range"]');
 		for (var i = 0; i < inputs.length; i++) {
 			inputs[i].onchange = onchange;
 			inputs[i].oninput = onchange;
-
 		}
 
 		//TODO: dont repeat yor self!
@@ -119,17 +106,8 @@ var init = function(prs) {
 					eq[i].gain = 1;
 				}
 			}
-			setValue('ch-eq-slider-0', eq[0].gain);
-			setValue('ch-eq-slider-1', eq[1].gain);
-			setValue('ch-eq-slider-2', eq[2].gain);
-			setValue('ch-eq-slider-3', eq[3].gain);
-			setValue('ch-eq-slider-4', eq[4].gain);
-			setValue('ch-eq-slider-5', eq[5].gain);
-			setValue('ch-eq-slider-6', eq[6].gain);
-			setValue('ch-eq-slider-7', eq[7].gain);
-			setValue('ch-eq-slider-8', eq[8].gain);
-			setValue('ch-eq-slider-9', eq[9].gain);
-			setValue('ch-eq-slider-10', eq[10].gain);
+
+      setAllEqSliders();
 
 			// When user presses reset, change it back to default value (stereo)
 			config.mono = false;
@@ -213,17 +191,9 @@ var init = function(prs) {
 				for (var i = 0; i < 10; i++) {
 					eq[i + 1].gain = selected.gains[i];
 				}
-				setValue('ch-eq-slider-0', eq[0].gain);
-				setValue('ch-eq-slider-1', eq[1].gain);
-				setValue('ch-eq-slider-2', eq[2].gain);
-				setValue('ch-eq-slider-3', eq[3].gain);
-				setValue('ch-eq-slider-4', eq[4].gain);
-				setValue('ch-eq-slider-5', eq[5].gain);
-				setValue('ch-eq-slider-6', eq[6].gain);
-				setValue('ch-eq-slider-7', eq[7].gain);
-				setValue('ch-eq-slider-8', eq[8].gain);
-				setValue('ch-eq-slider-9', eq[9].gain);
-				setValue('ch-eq-slider-10', eq[10].gain);
+
+        setAllEqSliders();
+
 				chart.prepareChart(eq);
 				propagateData();
 
@@ -231,16 +201,8 @@ var init = function(prs) {
 			switch (ev.target.value) {
 			case 'action::save':
 				modal.confirm('Do you want to save "' + selected.name + '" preset?', function() {
-					selected.gains[0] = getValue('ch-eq-slider-1');
-					selected.gains[1] = getValue('ch-eq-slider-2');
-					selected.gains[2] = getValue('ch-eq-slider-3');
-					selected.gains[3] = getValue('ch-eq-slider-4');
-					selected.gains[4] = getValue('ch-eq-slider-5');
-					selected.gains[5] = getValue('ch-eq-slider-6');
-					selected.gains[6] = getValue('ch-eq-slider-7');
-					selected.gains[7] = getValue('ch-eq-slider-8');
-					selected.gains[8] = getValue('ch-eq-slider-9');
-					selected.gains[9] = getValue('ch-eq-slider-10');
+          for (var i = 0; i < selected.gains.length; i++)
+            selected.gains[i] = getValue('ch-eq-slider-' + (i + 1))
 					console.log('action::save', selected);
 					presets.setPreset(selected);
 					chrome.storage.sync.set({
@@ -315,17 +277,7 @@ var init = function(prs) {
 					action : 'get'
 				}, function(response) {
 					eq = response.eq;
-					setValue('ch-eq-slider-0', eq[0].gain);
-					setValue('ch-eq-slider-1', eq[1].gain);
-					setValue('ch-eq-slider-2', eq[2].gain);
-					setValue('ch-eq-slider-3', eq[3].gain);
-					setValue('ch-eq-slider-4', eq[4].gain);
-					setValue('ch-eq-slider-5', eq[5].gain);
-					setValue('ch-eq-slider-6', eq[6].gain);
-					setValue('ch-eq-slider-7', eq[7].gain);
-					setValue('ch-eq-slider-8', eq[8].gain);
-					setValue('ch-eq-slider-9', eq[9].gain);
-					setValue('ch-eq-slider-10', eq[10].gain);
+					setAllEqSliders();
 
 					config = response.config;
 					// CUSTOM: make sure toggle is checked
