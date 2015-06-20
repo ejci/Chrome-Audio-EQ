@@ -43,11 +43,14 @@ var init = function(prs) {
 
   function snapSliders(index, diff){
     for (var i = 1; i < 10; i++) {
+      console.log('snap', i)
       diff = diff / 2;
       if (eq[index - i] && eq[index - i].f) {
+        console.log('minus', parseFloat(eq[index - i].gain, 10) + diff)
         eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
       }
-      if (eq[index + i] && eq[index + i].f) {
+      if (eq[index + i] && eq[index + i].f !== undefined) {
+        console.log('plus', parseFloat(eq[index + i].gain, 10) + diff)
         eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
       }
     }
@@ -60,7 +63,7 @@ var init = function(prs) {
       eq[0].gain = getValue('ch-eq-slider-0');
     } else {
       //eq settings
-      var index = evt.target.id.match(/\d+/); // matches numeric part of id
+      var index = evt.target.id.match(/\d+/)[0]; // matches numeric part of id
       var diff = evt.target.value - eq[index].gain;
       eq[index].gain = evt.target.value;
       if (config.snap) snapSliders(index, diff);
@@ -94,67 +97,65 @@ var init = function(prs) {
 		propagateData();
 	};
 
+  function toggleConfig(setting, id){
+    setting = !setting;
+    if (setting === true) {
+      document.getElementById(id).classList.add('on')
+    } else {
+      document.getElementById(id).classList.remove('on')
+    }
+    propagateData();
+    return setting;
+  }
+
 	document.getElementById('channels').onclick = function(ev) {
-		config.mono = !config.mono;
-		if (config.mono === true) {
-			document.getElementById('channels').classList.add('on');
-		} else {
-			document.getElementById('channels').classList.remove('on');
-		}
-		propagateData();
+    config.mono = toggleConfig(config.mono, 'channels');
 	};
 
 	document.getElementById('snap').onclick = function(ev) {
-		config.snap = !config.snap;
-		if (config.snap === true) {
-			document.getElementById('snap').classList.add('on');
-		} else {
-			document.getElementById('snap').classList.remove('on');
-		}
-		propagateData();
+		config.snap = toggleConfig(config.snap, 'snap');
 	};
 
-	document.getElementById('presets').onclick = function(ev) {
-		//load EQ presets
-		var userPresets = presets.getUsers();
-		var predefinedPresets = presets.getPredefined();
-		var selectedPreset = presets.getSelected();
-		// console.log('userPresets', userPresets);
-		// console.log('predefinedPresets', predefinedPresets);
-		// console.log('selectedPreset', selectedPreset);
-		var userPresetsSelect = document.getElementById('presetsSelectUser');
-		var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
-		userPresetsSelect.innerHTML = '';
-		if (selectedPreset.default === true) {
-			document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
-		} else {
-			document.getElementById('preset_delete').removeAttribute('disabled');
-		}
-    var option, i;
-		for (i = 0; i < userPresets.length; i++) {
-			option = document.createElement("option");
-			option.text = userPresets[i].name;
-			option.setAttribute('value', 'preset::my::' + option.text);
-			if (presets.isSelected(userPresets[i])) {
-				option.setAttribute('selected', 'selected');
-			}
-			userPresetsSelect.appendChild(option, null);
-		}
-		predefinedPresetsSelect.innerHTML = '';
-		for (i = 0; i < predefinedPresets.length; i++) {
-			option = document.createElement("option");
-			option.text = predefinedPresets[i].name;
-			option.setAttribute('value', 'preset::default::' + option.text);
-			if (presets.isSelected(predefinedPresets[i])) {
-				option.setAttribute('selected', 'selected');
-			}
-			predefinedPresetsSelect.appendChild(option, null);
-		}
+  // TODO: Should only need to build this one time,
+  //        but will need to append new saved presets.
+  document.getElementById('presets').onclick = function(ev) {
+    //load EQ presets
+    if (presets.getSelected().default === true) {
+      document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
+    } else {
+      document.getElementById('preset_delete').removeAttribute('disabled');
+    }
 
-		var mousedownEvent = document.createEvent("MouseEvent");
-		mousedownEvent.initMouseEvent("mousedown");
-		document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
-	};
+    function appendPreset(preset, presetsSelect, section){
+      var option = document.createElement("option");
+      option.text = preset.name;
+      option.setAttribute('value', ['preset', section, option.text].join('::'));
+      if (presets.isSelected(preset)){
+        option.setAttribute('selected', 'selected');
+      }
+      presetsSelect.appendChild(option, null);
+    }
+
+    var i   // note: Select is noun: SelectBox Input
+      , userPresets = presets.getUsers()
+      , userPresetsSelect = document.getElementById('presetsSelectUser')
+      , predefinedPresets = presets.getPredefined()
+      , predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
+
+    userPresetsSelect.innerHTML = '';
+    for (i = 0; i < userPresets.length; i++) {
+      appendPreset( userPresets[i], userPresetsSelect, 'my');
+    }
+
+    predefinedPresetsSelect.innerHTML = '';
+    for (i = 0; i < predefinedPresets.length; i++) {
+      appendPreset(predefinedPresets[i], predefinedPresetsSelect, 'default')
+    }
+
+    var mousedownEvent = document.createEvent("MouseEvent");
+    mousedownEvent.initMouseEvent("mousedown");
+    document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
+  };
 
 
   // TODO: This doesn't handle re-selecting the current preset
@@ -199,23 +200,20 @@ var init = function(prs) {
 		case 'action::reset':
 			modal.confirm('Do you want to reset "' + selected.name + '" preset?', function() {
 				presets.reset(selected.name);
-				presets.setSelected();
-				selected = presets.getSelected();
-				updateEq();
+				presets.setSelected(); // setSelected calls getSelected internally, so no need calling again
+        updateEq();
 			});
 			break;
 		case 'action::reset_all':
 			modal.confirm('Do you want to reset all presets to default state?', function() {
 				presets.resetAll();
 				presets.setSelected();
-				selected = presets.getSelected();
 				updateEq();
 			});
 			break;
 		default:
 			var val = (ev.target.value).split('::');
 			presets.setSelected(val[2]);
-			selected = presets.getSelected();
 			chrome.storage.local.set({
 				selected : selected.name
 			});
