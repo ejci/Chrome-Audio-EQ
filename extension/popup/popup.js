@@ -1,31 +1,86 @@
 /**
  * I need to clean this mess...
  */
-
-var eq = CONST.EQ;
-var config = CONST.CONFIG;
-var version = CONST.version;
+/*global  window,
+          document,
+          ChromeAudioEQ,  
+          chrome,
+          CONST,
+          chart,
+          console, 
+          modal,
+          sliders,
+          presets
+                        */
+'use strict';
 
 var init = function(prs) {
+  var eq = CONST.EQ
+    , version = CONST.VERSION
+    , config = CONST.CONFIG;
+
+    // pulled  all function defs out of the try/catch
+    function getValue(id) {
+      return document.getElementById(id).value;
+    }
+
+    function setValue(id, val) {
+      document.getElementById(id).value = val;
+    }
+
+    function getEqIndex(f) {
+      for (var l = eq.length, i = 0; i < l; i++) {
+        if (eq[i].f && eq[i].f + '' === f) {
+          return i;
+        }
+      }
+      return false;
+    }
+
+    function onchange(evt) {
+      // Unclear what 'this' is. I could tell jshint to ignore,
+      // but events pass themselves in as first callback arg
+      // 'evt.target' is same object as 'this' and easier to understand 
+      console.log('onchange');
+      var slider = evt.target.getAttribute('eq');
+      if (slider === 'master') {
+        //master volume change
+        eq[0].gain = getValue('ch-eq-slider-0');
+      } else {
+        //eq settings change
+        var index = getEqIndex(slider);
+        var diff = evt.target.value - eq[index].gain;
+        eq[index].gain = evt.target.value;
+        if (config.snap) {
+          for (var i = 1; i < 10; i++) {
+            diff = diff / 2;
+            if (eq[index - i] && eq[index - i].f) {
+              eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
+            }
+            if (eq[index + i] && eq[index + i].f) {
+              eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
+            }
+          }
+        }
+
+        setValue('ch-eq-slider-1', eq[1].gain);
+        setValue('ch-eq-slider-2', eq[2].gain);
+        setValue('ch-eq-slider-3', eq[3].gain);
+        setValue('ch-eq-slider-4', eq[4].gain);
+        setValue('ch-eq-slider-5', eq[5].gain);
+        setValue('ch-eq-slider-6', eq[6].gain);
+        setValue('ch-eq-slider-7', eq[7].gain);
+        setValue('ch-eq-slider-8', eq[8].gain);
+        setValue('ch-eq-slider-9', eq[9].gain);
+        setValue('ch-eq-slider-10', eq[10].gain);
+        chart.prepareChart(eq);
+      }
+
+      propagateData();
+    }
+
 	try {
 		var canvas, context, inputs;
-
-		function getValue(id) {
-			return document.getElementById(id).value;
-		};
-
-		function setValue(id, val) {
-			document.getElementById(id).value = val;
-		};
-
-		function getEqIndex(f) {
-			for (var l = eq.length, i = 0; i < l; i++) {
-				if (eq[i].f && eq[i].f + '' === f) {
-					return i;
-				}
-			}
-			return false;
-		};
 
 		var propagateData = function() {
 			//send message
@@ -46,45 +101,6 @@ var init = function(prs) {
 				});
 			}
 
-		};
-
-		function onchange() {
-			console.log('onchange');
-			var slider = this.getAttribute('eq');
-			if (slider === 'master') {
-				//master volume change
-				eq[0].gain = getValue('ch-eq-slider-0');
-			} else {
-				//eq settings change
-				var index = getEqIndex(slider);
-				var diff = this.value - eq[index].gain;
-				eq[index].gain = this.value;
-				if (config.snap) {
-					for (var i = 1; i < 10; i++) {
-						diff = diff / 2;
-						if (eq[index - i] && eq[index - i].f) {
-							eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
-						}
-						if (eq[index + i] && eq[index + i].f) {
-							eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
-						}
-					}
-				}
-
-				setValue('ch-eq-slider-1', eq[1].gain);
-				setValue('ch-eq-slider-2', eq[2].gain);
-				setValue('ch-eq-slider-3', eq[3].gain);
-				setValue('ch-eq-slider-4', eq[4].gain);
-				setValue('ch-eq-slider-5', eq[5].gain);
-				setValue('ch-eq-slider-6', eq[6].gain);
-				setValue('ch-eq-slider-7', eq[7].gain);
-				setValue('ch-eq-slider-8', eq[8].gain);
-				setValue('ch-eq-slider-9', eq[9].gain);
-				setValue('ch-eq-slider-10', eq[10].gain);
-				chart.prepareChart(eq);
-			}
-
-			propagateData();
 		};
 
 		inputs = document.querySelectorAll('input[type="range"]');
@@ -158,13 +174,14 @@ var init = function(prs) {
 			var userPresetsSelect = document.getElementById('presetsSelectUser');
 			var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
 			userPresetsSelect.innerHTML = '';
-			if (selectedPreset.default == true) {
+			if (selectedPreset.default === true) {
 				document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
 			} else {
 				document.getElementById('preset_delete').removeAttribute('disabled');
 			}
-			for (var l = userPresets.length, i = 0; i < l; i++) {
-				var option = document.createElement("option");
+      var option, i;
+			for (i = 0; i < userPresets.length; i++) {
+				option = document.createElement("option");
 				option.text = userPresets[i].name;
 				option.setAttribute('value', 'preset::my::' + option.text);
 				if (presets.isSelected(userPresets[i])) {
@@ -173,8 +190,8 @@ var init = function(prs) {
 				userPresetsSelect.appendChild(option, null);
 			}
 			predefinedPresetsSelect.innerHTML = '';
-			for (var l = predefinedPresets.length, i = 0; i < l; i++) {
-				var option = document.createElement("option");
+			for (i = 0; i < predefinedPresets.length; i++) {
+				option = document.createElement("option");
 				option.text = predefinedPresets[i].name;
 				option.setAttribute('value', 'preset::default::' + option.text);
 				if (presets.isSelected(predefinedPresets[i])) {

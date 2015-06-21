@@ -1,6 +1,12 @@
 /**
  * Icon for backround page.
  */
+ /* global  window,
+            document,
+            chrome
+                      */
+'use strict';
+
 var icon = (function() {
 	var canvas, context, w, h;
 	var px = (window.devicePixelRatio > 1) ? 2 : 1;
@@ -37,9 +43,11 @@ var icon = (function() {
 	 * @param {Object} values
 	 */
 	var generate = function(eq) {
-		var values = [];
-		for (var i = 0; i < 3; i++) {
-			var val = (parseFloat(eq[i * 3 + 1].gain, 10) + parseFloat(eq[i * 3 + 2].gain, 10) + parseFloat(eq[i * 3 + 3].gain, 10));
+		var val, i
+      , values = [];
+		
+    for (i = 0; i < 3; i++) {
+			val = (parseFloat(eq[i * 3 + 1].gain, 10) + parseFloat(eq[i * 3 + 2].gain, 10) + parseFloat(eq[i * 3 + 3].gain, 10));
 			val = (val !== 0) ? val / 3 : 0;
 			val = Math.floor((val / 12) * 10);
 			values.push(val);
@@ -51,8 +59,9 @@ var icon = (function() {
 		context.closePath();
 		//draw value by value
 		var lines = [5, 15, 25];
-		for ( l = values.length, i = 0; i < l; i++) {
-			var val = values[i];
+
+		for ( i = 0; i < values.length; i++) {
+			val = values[i];
 			context.beginPath();
 			context.fillStyle = 'rgb(120,120,120)';
 			context.fillRect(size(lines[i]), size(0), size(3), size(11 - val));

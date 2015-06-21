@@ -1,4 +1,5 @@
 var presets = (function() {
+  'use strict';
 	var list = [];
 	var selected = false;
 
