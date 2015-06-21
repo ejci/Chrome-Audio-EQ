@@ -229,6 +229,7 @@ var init = function(prs) {
 		default:
 			var val = (ev.target.value).split('::');
 			presets.setSelected(val[2]);
+      selected = presets.getSelected();
 			chrome.storage.local.set({
 				selected : selected.name
 			});
