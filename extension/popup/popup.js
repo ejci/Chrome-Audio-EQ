@@ -30,6 +30,15 @@ var init = function(prs) {
       setValue('ch-eq-slider-' + i, eq[i].gain);
   }
 
+  function getEqIndex(f) {
+    for (var i = 0; i < eq.length; i++) {
+      if (eq[i].f && eq[i].f + '' === f) {
+        return i;
+      }
+    }
+    return false;
+  }
+
   function propagateData () {
 		//send message
 		chrome.runtime.sendMessage({
@@ -63,7 +72,13 @@ var init = function(prs) {
       eq[0].gain = getValue('ch-eq-slider-0');
     } else {
       //eq settings
-      var index = evt.target.id.match(/\d+/)[0]; // matches numeric part of id
+      // TODO  match(/\d/) is always the same result as getEqIndex()
+      //        but for some reason causes bug. getEqIndex takes many more
+      //        CPU cycles and touches the DOM. Bug is probably elsewhere
+      //        and conveniently hidden by the delay.
+      // var index = evt.target.id.match(/\d+/)[0];
+      var index = getEqIndex(slider);
+
       var diff = evt.target.value - eq[index].gain;
       eq[index].gain = evt.target.value;
       if (config.snap) snapSliders(index, diff);
