@@ -1,13 +1,10 @@
-/**
- * I need to clean this mess...
- */
 /*global  window,
           document,
-          ChromeAudioEQ,  
+          ChromeAudioEQ,
           chrome,
           CONST,
           chart,
-          console, 
+          console,
           modal,
           sliders,
           presets
@@ -19,380 +16,290 @@ var init = function(prs) {
     , version = CONST.VERSION
     , config = CONST.CONFIG;
 
-    // pulled  all function defs out of the try/catch
-    function getValue(id) {
-      return document.getElementById(id).value;
-    }
+  // pulled  all function defs out of the try/catch
+  function getValue(id) {
+    return document.getElementById(id).value;
+  }
 
-    function setValue(id, val) {
-      document.getElementById(id).value = val;
-    }
+  function setValue(id, val) {
+    document.getElementById(id).value = val;
+  }
 
-    function getEqIndex(f) {
-      for (var l = eq.length, i = 0; i < l; i++) {
-        if (eq[i].f && eq[i].f + '' === f) {
-          return i;
-        }
+  function setAllEqSliders () {
+    for (var i = 0; i < eq.length; i++)
+      setValue('ch-eq-slider-' + i, eq[i].gain);
+  }
+
+  function getEqIndex(f) {
+    for (var i = 0; i < eq.length; i++) {
+      if (eq[i].f && eq[i].f + '' === f) {
+        return i;
       }
-      return false;
     }
+    return false;
+  }
 
-    function onchange(evt) {
-      // Unclear what 'this' is. I could tell jshint to ignore,
-      // but events pass themselves in as first callback arg
-      // 'evt.target' is same object as 'this' and easier to understand 
-      console.log('onchange');
-      var slider = evt.target.getAttribute('eq');
-      if (slider === 'master') {
-        //master volume change
-        eq[0].gain = getValue('ch-eq-slider-0');
-      } else {
-        //eq settings change
-        var index = getEqIndex(slider);
-        var diff = evt.target.value - eq[index].gain;
-        eq[index].gain = evt.target.value;
-        if (config.snap) {
-          for (var i = 1; i < 10; i++) {
-            diff = diff / 2;
-            if (eq[index - i] && eq[index - i].f) {
-              eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
-            }
-            if (eq[index + i] && eq[index + i].f) {
-              eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
-            }
-          }
-        }
-
-        setValue('ch-eq-slider-1', eq[1].gain);
-        setValue('ch-eq-slider-2', eq[2].gain);
-        setValue('ch-eq-slider-3', eq[3].gain);
-        setValue('ch-eq-slider-4', eq[4].gain);
-        setValue('ch-eq-slider-5', eq[5].gain);
-        setValue('ch-eq-slider-6', eq[6].gain);
-        setValue('ch-eq-slider-7', eq[7].gain);
-        setValue('ch-eq-slider-8', eq[8].gain);
-        setValue('ch-eq-slider-9', eq[9].gain);
-        setValue('ch-eq-slider-10', eq[10].gain);
-        chart.prepareChart(eq);
-      }
-
-      propagateData();
-    }
-
-	try {
-		var canvas, context, inputs;
-
-		var propagateData = function() {
-			//send message
-			try {
-				chrome.runtime.sendMessage({
-					action : 'set',
-					eq : eq,
-					config : config,
-					selected : presets.getSelected(),
-					version : version
-				});
-			} catch(e) {
-				//	throw e;
-				chrome.runtime.sendMessage({
-					action : 'error',
-					source : 'popup.js',
-					error : e
-				});
-			}
-
-		};
-
-		inputs = document.querySelectorAll('input[type="range"]');
-		for (var i = 0; i < inputs.length; i++) {
-			inputs[i].onchange = onchange;
-			inputs[i].oninput = onchange;
-
-		}
-
-		//TODO: dont repeat yor self!
-		document.getElementById('reset').onclick = function() {
-			for (var i = 0; i < eq.length; i++) {
-				if (eq[i].f) {
-					eq[i].gain = 0;
-				} else {
-					eq[i].gain = 1;
-				}
-			}
-			setValue('ch-eq-slider-0', eq[0].gain);
-			setValue('ch-eq-slider-1', eq[1].gain);
-			setValue('ch-eq-slider-2', eq[2].gain);
-			setValue('ch-eq-slider-3', eq[3].gain);
-			setValue('ch-eq-slider-4', eq[4].gain);
-			setValue('ch-eq-slider-5', eq[5].gain);
-			setValue('ch-eq-slider-6', eq[6].gain);
-			setValue('ch-eq-slider-7', eq[7].gain);
-			setValue('ch-eq-slider-8', eq[8].gain);
-			setValue('ch-eq-slider-9', eq[9].gain);
-			setValue('ch-eq-slider-10', eq[10].gain);
-
-			// When user presses reset, change it back to default value (stereo)
-			config.mono = false;
-			document.getElementById('channels').classList.remove('on');
-
-			presets.setSelected();
-
-			chart.prepareChart(eq);
-			propagateData();
-
-		};
-
-		document.getElementById('channels').onclick = function(ev) {
-			config.mono = !config.mono;
-			if (config.mono === true) {
-				document.getElementById('channels').classList.add('on');
-			} else {
-				document.getElementById('channels').classList.remove('on');
-			}
-			propagateData();
-		};
-
-		document.getElementById('snap').onclick = function(ev) {
-			config.snap = !config.snap;
-			if (config.snap === true) {
-				document.getElementById('snap').classList.add('on');
-			} else {
-				document.getElementById('snap').classList.remove('on');
-			}
-			propagateData();
-		};
-
-		document.getElementById('presets').onclick = function(ev) {
-
-			//load EQ presets
-			var userPresets = presets.getUsers();
-			var predefinedPresets = presets.getPredefined();
-			var selectedPreset = presets.getSelected();
-			console.log('userPresets', userPresets);
-			console.log('predefinedPresets', predefinedPresets);
-			console.log('selectedPreset', selectedPreset);
-			var userPresetsSelect = document.getElementById('presetsSelectUser');
-			var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
-			userPresetsSelect.innerHTML = '';
-			if (selectedPreset.default === true) {
-				document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
-			} else {
-				document.getElementById('preset_delete').removeAttribute('disabled');
-			}
-      var option, i;
-			for (i = 0; i < userPresets.length; i++) {
-				option = document.createElement("option");
-				option.text = userPresets[i].name;
-				option.setAttribute('value', 'preset::my::' + option.text);
-				if (presets.isSelected(userPresets[i])) {
-					option.setAttribute('selected', 'selected');
-				}
-				userPresetsSelect.appendChild(option, null);
-			}
-			predefinedPresetsSelect.innerHTML = '';
-			for (i = 0; i < predefinedPresets.length; i++) {
-				option = document.createElement("option");
-				option.text = predefinedPresets[i].name;
-				option.setAttribute('value', 'preset::default::' + option.text);
-				if (presets.isSelected(predefinedPresets[i])) {
-					option.setAttribute('selected', 'selected');
-				}
-				predefinedPresetsSelect.appendChild(option, null);
-			}
-
-			var mousedownEvent = document.createEvent("MouseEvent");
-			mousedownEvent.initMouseEvent("mousedown");
-			document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
-		};
-
-		document.getElementById('presetsSelect').onchange = function(ev) {
-			//console.log('ev.target', ev.target);
-			//console.log('val', ev.target.value);
-			var selected = presets.getSelected();
-			var updateEq = function() {
-				for (var i = 0; i < 10; i++) {
-					eq[i + 1].gain = selected.gains[i];
-				}
-				setValue('ch-eq-slider-0', eq[0].gain);
-				setValue('ch-eq-slider-1', eq[1].gain);
-				setValue('ch-eq-slider-2', eq[2].gain);
-				setValue('ch-eq-slider-3', eq[3].gain);
-				setValue('ch-eq-slider-4', eq[4].gain);
-				setValue('ch-eq-slider-5', eq[5].gain);
-				setValue('ch-eq-slider-6', eq[6].gain);
-				setValue('ch-eq-slider-7', eq[7].gain);
-				setValue('ch-eq-slider-8', eq[8].gain);
-				setValue('ch-eq-slider-9', eq[9].gain);
-				setValue('ch-eq-slider-10', eq[10].gain);
-				chart.prepareChart(eq);
-				propagateData();
-
-			};
-			switch (ev.target.value) {
-			case 'action::save':
-				modal.confirm('Do you want to save "' + selected.name + '" preset?', function() {
-					selected.gains[0] = getValue('ch-eq-slider-1');
-					selected.gains[1] = getValue('ch-eq-slider-2');
-					selected.gains[2] = getValue('ch-eq-slider-3');
-					selected.gains[3] = getValue('ch-eq-slider-4');
-					selected.gains[4] = getValue('ch-eq-slider-5');
-					selected.gains[5] = getValue('ch-eq-slider-6');
-					selected.gains[6] = getValue('ch-eq-slider-7');
-					selected.gains[7] = getValue('ch-eq-slider-8');
-					selected.gains[8] = getValue('ch-eq-slider-9');
-					selected.gains[9] = getValue('ch-eq-slider-10');
-					console.log('action::save', selected);
-					presets.setPreset(selected);
-					chrome.storage.sync.set({
-						presets : presets.getAll()
-					});
-				});
-
-				break;
-			case 'action::save_as':
-				modal.prompt('New preset name', function(name) {
-					if (name && name.length > 0) {
-						var preset = JSON.parse(JSON.stringify(selected));
-						preset.name = name;
-						presets.setNewPreset(preset);
-						chrome.storage.sync.set({
-							presets : presets.getAll()
-						});
-					}
-				}, function() {
-				});
-				break;
-			case 'action::delete':
-				modal.confirm('Do you want to delete "' + selected.name + '" preset?', function() {
-					presets.removeByName(selected.name);
-					chrome.storage.sync.set({
-						presets : presets.getAll()
-					});
-				});
-				break;
-			case 'action::reset':
-				modal.confirm('Do you want to reset "' + selected.name + '" preset?', function() {
-					presets.reset(selected.name);
-					presets.setSelected();
-					selected = presets.getSelected();
-					chrome.storage.sync.set({
-						presets : presets.getAll()
-					});
-					updateEq();
-				});
-
-				break;
-			case 'action::reset_all':
-				modal.confirm('Do you want to reset all presets to default state?', function() {
-					presets.resetAll();
-					presets.setSelected();
-					selected = presets.getSelected();
-					chrome.storage.sync.set({
-						presets : presets.getAll()
-					});
-					updateEq();
-				});
-				break;
-			default:
-				var val = (ev.target.value).split('::');
-				presets.setSelected(val[2]);
-				selected = presets.getSelected();
-				chrome.storage.local.set({
-					selected : selected.name
-				});
-				updateEq();
-			}
-
-		};
-
-		//intialization
-		try {
-			chart.prepareChart(eq);
-			sliders.prepareSliders(eq);
-
-			if (chrome.runtime) {
-				chrome.runtime.sendMessage({
-					action : 'get'
-				}, function(response) {
-					eq = response.eq;
-					setValue('ch-eq-slider-0', eq[0].gain);
-					setValue('ch-eq-slider-1', eq[1].gain);
-					setValue('ch-eq-slider-2', eq[2].gain);
-					setValue('ch-eq-slider-3', eq[3].gain);
-					setValue('ch-eq-slider-4', eq[4].gain);
-					setValue('ch-eq-slider-5', eq[5].gain);
-					setValue('ch-eq-slider-6', eq[6].gain);
-					setValue('ch-eq-slider-7', eq[7].gain);
-					setValue('ch-eq-slider-8', eq[8].gain);
-					setValue('ch-eq-slider-9', eq[9].gain);
-					setValue('ch-eq-slider-10', eq[10].gain);
-
-					config = response.config;
-					// CUSTOM: make sure toggle is checked
-					if (config.mono) {
-						document.getElementById('channels').classList.add('on');
-					} else {
-						document.getElementById('channels').classList.remove('on');
-					}
-					if (config.snap) {
-						document.getElementById('snap').classList.add('on');
-					} else {
-						document.getElementById('snap').classList.remove('on');
-					}
-					chart.prepareChart(eq);
-
-				});
-			}
-
-		} catch(e) {
-			//	throw e;
-			chrome.runtime.sendMessage({
-				action : 'error',
-				source : 'popup.js',
-				error : e
-			});
-			// Psssst! Dont tell anyone :)
-			throw e;
-		}
-	} catch(e) {
-		//	throw e;
+  function propagateData () {
+		//send message
 		chrome.runtime.sendMessage({
-			action : 'error',
-			source : 'popup.js',
-			error : e
+			action : 'set',
+			eq : eq,
+			config : config,
+			selected : presets.getSelected(),
+			version : version
 		});
-		throw e;
 	}
+
+  function snapSliders(index, diff){
+    for (var i = 1; i < 10; i++) {
+      console.log('snap', i)
+      diff = diff / 2;
+      if (eq[index - i] && eq[index - i].f) {
+        console.log('minus', parseFloat(eq[index - i].gain, 10) + diff)
+        eq[index - i].gain = parseFloat(eq[index - i].gain, 10) + diff;
+      }
+      if (eq[index + i] && eq[index + i].f !== undefined) {
+        console.log('plus', parseFloat(eq[index + i].gain, 10) + diff)
+        eq[index + i].gain = parseFloat(eq[index + i].gain, 10) + diff;
+      }
+    }
+  }
+
+  function onSliderChange(evt) {
+    // console.log('onchange');
+    var slider = evt.target.getAttribute('eq');
+    if (slider === 'master') { //master volume
+      eq[0].gain = getValue('ch-eq-slider-0');
+    } else {
+      //eq settings
+      // TODO  match(/\d/) is always the same result as getEqIndex()
+      //        but for some reason causes bug. getEqIndex takes many more
+      //        CPU cycles and touches the DOM. Bug is probably elsewhere
+      //        and conveniently hidden by the delay.
+      // var index = evt.target.id.match(/\d+/)[0];
+      var index = getEqIndex(slider);
+
+      var diff = evt.target.value - eq[index].gain;
+      eq[index].gain = evt.target.value;
+      if (config.snap) snapSliders(index, diff);
+      setAllEqSliders();
+      chart.prepareChart(eq);
+    }
+    propagateData();
+  }
+
+	var sliderInputs = document.querySelectorAll('input[type="range"]');
+	for (var i = 0; i < sliderInputs.length; i++) {
+		sliderInputs[i].onchange = onSliderChange;
+		sliderInputs[i].oninput = onSliderChange;
+	}
+
+	document.getElementById('reset').onclick = function reset() {
+		for (var i = 0; i < eq.length; i++) {
+		  eq[i].gain = 0;
+      if ( ! eq[i].f ) {
+        eq[i].gain = 1; // master
+      }
+		}
+    setAllEqSliders();
+
+    // return to default (stereo)
+		config.mono = false;
+		document.getElementById('channels').classList.remove('on');
+
+    presets.setSelected();
+		chart.prepareChart(eq);
+		propagateData();
+	};
+
+  function toggleConfig(setting, id){
+    setting = !setting;
+    if (setting === true) {
+      document.getElementById(id).classList.add('on')
+    } else {
+      document.getElementById(id).classList.remove('on')
+    }
+    propagateData();
+    return setting;
+  }
+
+	document.getElementById('channels').onclick = function(ev) {
+    config.mono = toggleConfig(config.mono, 'channels');
+	};
+
+	document.getElementById('snap').onclick = function(ev) {
+		config.snap = toggleConfig(config.snap, 'snap');
+	};
+
+  // TODO: Should only need to build this one time,
+  //        but will need to append new saved presets.
+  document.getElementById('presets').onclick = function(ev) {
+    //load EQ presets
+    if (presets.getSelected().default === true) {
+      document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
+    } else {
+      document.getElementById('preset_delete').removeAttribute('disabled');
+    }
+
+    function appendPreset(preset, presetsSelect, section){
+      var option = document.createElement("option");
+      option.text = preset.name;
+      option.setAttribute('value', ['preset', section, option.text].join('::'));
+      if (presets.isSelected(preset)){
+        option.setAttribute('selected', 'selected');
+      }
+      presetsSelect.appendChild(option, null);
+    }
+
+    var i   // note: Select is noun: SelectBox Input
+      , userPresets = presets.getUsers()
+      , userPresetsSelect = document.getElementById('presetsSelectUser')
+      , predefinedPresets = presets.getPredefined()
+      , predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
+
+    userPresetsSelect.innerHTML = '';
+    for (i = 0; i < userPresets.length; i++) {
+      appendPreset( userPresets[i], userPresetsSelect, 'my');
+    }
+
+    predefinedPresetsSelect.innerHTML = '';
+    for (i = 0; i < predefinedPresets.length; i++) {
+      appendPreset(predefinedPresets[i], predefinedPresetsSelect, 'default')
+    }
+
+    var mousedownEvent = document.createEvent("MouseEvent");
+    mousedownEvent.initMouseEvent("mousedown");
+    document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
+  };
+
+
+  // TODO: This doesn't handle re-selecting the current preset
+  //        after making some slider changes.
+	document.getElementById('presetsSelect').onchange = function(ev) {
+		//console.log('ev.target', ev.target);
+		//console.log('val', ev.target.value);
+		var selected = presets.getSelected();
+		var updateEq = function() {
+			for (var i = 0; i < 10; i++) {
+				eq[i + 1].gain = selected.gains[i];
+			}
+      setAllEqSliders();
+			chart.prepareChart(eq);
+			propagateData();
+		};
+		switch (ev.target.value) {
+		case 'action::save':
+			modal.confirm('Do you want to save "' + selected.name + '" preset?', function() {
+        for (var i = 0; i < selected.gains.length; i++)
+          selected.gains[i] = getValue('ch-eq-slider-' + (i + 1))
+				console.log('action::save', selected);
+				presets.setPreset(selected);
+			});
+
+			break;
+		case 'action::save_as':
+			modal.prompt('New preset name', function(name) {
+				if (name && name.length > 0) {
+					var preset = JSON.parse(JSON.stringify(selected));
+					preset.name = name;
+					presets.setNewPreset(preset)
+				}
+			}, function() {
+			});
+			break;
+		case 'action::delete':
+			modal.confirm('Do you want to delete "' + selected.name + '" preset?', function() {
+				presets.removeByName(selected.name);
+			});
+			break;
+		case 'action::reset':
+			modal.confirm('Do you want to reset "' + selected.name + '" preset?', function() {
+				presets.reset(selected.name);
+				presets.setSelected(); // setSelected calls getSelected internally, so no need calling again
+        updateEq();
+			});
+			break;
+		case 'action::reset_all':
+			modal.confirm('Do you want to reset all presets to default state?', function() {
+				presets.resetAll();
+				presets.setSelected();
+				updateEq();
+			});
+			break;
+		default:
+			var val = (ev.target.value).split('::');
+			presets.setSelected(val[2]);
+      selected = presets.getSelected();
+			chrome.storage.local.set({
+				selected : selected.name
+			});
+			updateEq();
+		}
+    chrome.storage.sync.set({
+      presets : presets.getAll()
+    });
+	};
+
+	//intialization
+	chart.prepareChart(eq);
+	sliders.prepareSliders(eq);
+
+	chrome.runtime.sendMessage({
+		action : 'get'
+	}, function(response) {
+		eq = response.eq;
+		setAllEqSliders();
+
+    // TODO make config buttons into checkbox inputs so they can keep
+    //      their own state (might take a few CSS tricks)
+
+		config = response.config;
+		// CUSTOM: make sure toggle is checked
+		if (config.mono) {
+			document.getElementById('channels').classList.add('on');
+		} else {
+			document.getElementById('channels').classList.remove('on');
+		}
+		if (config.snap) {
+			document.getElementById('snap').classList.add('on');
+		} else {
+			document.getElementById('snap').classList.remove('on');
+		}
+		chart.prepareChart(eq);
+	});
 };
 
 //LOAD
 window.addEventListener("load", function() {
-	if (chrome && chrome.storage) {
-		chrome.storage.sync.get('presets', function(data) {
-			console.log('popup.js', 'presets', data);
-			if (data.presets) {
-				presets.setAll(data.presets);
-				chrome.storage.local.get('selected', function(data) {
-					console.log('popup.js', 'selected', data);
-					if (data.selected) {
-						presets.setSelected(data.selected.name);
-					}
-					init();
+	chrome.storage.sync.get('presets',
+    function(data) {
+  		// console.log('popup.js', 'presets', data);
+  		if (data.presets) {
+  			presets.setAll(data.presets);
+  			chrome.storage.local.get('selected', function(data) {
+  				// console.log('popup.js', 'selected', data);
+  				if (data.selected) {
+  					presets.setSelected(data.selected.name);
+  				}
+  			});
 
-				});
-
-			} else {
-				presets.setAll();
-				init();
-				//store it for next time
-				chrome.storage.sync.set({
-					presets : presets.getAll()
-				});
-			}
-		});
-	} else {
-		presets.setAll();
-		init();
-
-	}
+  		} else {
+  			presets.setAll();
+  			//store it for next time
+  			chrome.storage.sync.set({
+  				presets : presets.getAll()
+  			});
+  		}
+      init();
+  	}
+  );
 });
+
+// currently unsused
+function forwardErrToBackground(e){
+  chrome.runtime.sendMessage({
+    action : 'error',
+    source : 'popup.js',
+    error : e
+  });
+}
