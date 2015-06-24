@@ -1,10 +1,10 @@
 /**
  * Icon for backround page.
  */
- /* global  window,
-            document,
-            chrome
-                      */
+/* global  window,
+ document,
+ chrome
+ */
 'use strict';
 
 var icon = (function() {
@@ -26,9 +26,6 @@ var icon = (function() {
 			chrome.browserAction.setIcon({
 				path : canvas.toDataURL('image/png')
 			});
-		} else {
-			//fallback for demo page
-			document.getElementById('chrome.popup.icon').setAttribute('src', canvas.toDataURL('image/png'));
 		}
 	};
 
@@ -42,11 +39,10 @@ var icon = (function() {
 	 * Generate icon by values
 	 * @param {Object} values
 	 */
-	var generate = function(eq) {
-		var val, i
-      , values = [];
-		
-    for (i = 0; i < 3; i++) {
+	var generate = function(eq, status) {
+		var val, i, values = [];
+
+		for ( i = 0; i < 3; i++) {
 			val = (parseFloat(eq[i * 3 + 1].gain, 10) + parseFloat(eq[i * 3 + 2].gain, 10) + parseFloat(eq[i * 3 + 3].gain, 10));
 			val = (val !== 0) ? val / 3 : 0;
 			val = Math.floor((val / 12) * 10);
@@ -63,19 +59,19 @@ var icon = (function() {
 		for ( i = 0; i < values.length; i++) {
 			val = values[i];
 			context.beginPath();
-			context.fillStyle = 'rgb(120,120,120)';
+			context.fillStyle = (status == 'off' ? 'rgb(160, 160, 160)' : 'rgb(120, 120, 120)');
 			context.fillRect(size(lines[i]), size(0), size(3), size(11 - val));
 			context.fill();
 			context.closePath();
 
 			context.beginPath();
-			context.fillStyle = 'rgb(120,120,120)';
+			context.fillStyle = (status == 'off' ? 'rgb(160, 160, 160)' : 'rgb(120, 120, 120)');
 			context.fillRect(size(lines[i]), size(22 - val), size(3), size(10 + val));
 			context.fill();
 			context.closePath();
 
 			context.beginPath();
-			context.fillStyle = 'rgb(50,90,140)';
+			context.fillStyle = (status == 'off' ? 'rgb(140, 140, 140)' : 'rgb(50,90,140)');
 			context.fillRect(size(lines[i] - 2), size(13 - val), size(7), size(7));
 			context.fill();
 			context.closePath();
