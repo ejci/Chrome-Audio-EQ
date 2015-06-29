@@ -112,23 +112,14 @@ var init = function(prs) {
 		propagateData();
 	};
 
-  function toggleConfig(setting, id){
-    setting = !setting;
-    if (setting === true) {
-      document.getElementById(id).classList.add('on')
-    } else {
-      document.getElementById(id).classList.remove('on')
-    }
+	document.getElementById('channels').onchange = function(ev) {
+    config.mono = ev.target.checked;
     propagateData();
-    return setting;
-  }
-
-	document.getElementById('channels').onclick = function(ev) {
-    config.mono = toggleConfig(config.mono, 'channels');
 	};
 
-	document.getElementById('snap').onclick = function(ev) {
-		config.snap = toggleConfig(config.snap, 'snap');
+	document.getElementById('snap').onchange = function(ev) {
+    config.snap = ev.target.checked;
+    propagateData();
 	};
 
   // TODO: Should only need to build this one time,
@@ -250,22 +241,10 @@ var init = function(prs) {
 		eq = response.eq;
 		setAllEqSliders();
 
-    // TODO make config buttons into checkbox inputs so they can keep
-    //      their own state (might take a few CSS tricks)
-
 		config = response.config;
-		// CUSTOM: make sure toggle is checked
-		if (config.mono) {
-			document.getElementById('channels').classList.add('on');
-		} else {
-			document.getElementById('channels').classList.remove('on');
-		}
-		if (config.snap) {
-			document.getElementById('snap').classList.add('on');
-		} else {
-			document.getElementById('snap').classList.remove('on');
-		}
-		chart.prepareChart(eq);
+		document.getElementById('channels').checked = config.mono;
+		document.getElementById('snap').checked = config.snap;
+    chart.prepareChart(eq);
 	});
 };
 

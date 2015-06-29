@@ -69,8 +69,14 @@
 			</div>
 			<div class="controls-options">
 				<div class="left">
-					<a href="#" class="button indicator" id="channels">Mono</a>
-					<a href="#" class="button indicator" id="snap">Snap</a>
+					<span> <!--span is a hack to prevent shared siblings-->
+						<input type="checkbox" id="channels" class="invis" />
+						<label for="channels" class="button indicator">Mono</label>
+					</span>
+					<span>
+						<input type="checkbox" id="snap" class="invis" />
+						<label for="snap" class="button indicator">Snap</label>
+					</span>
 				</div>
 				<div class="right">
 					<a href="#" class="button presets" id="presets">Presets
