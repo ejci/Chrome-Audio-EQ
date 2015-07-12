@@ -177,8 +177,9 @@ var init = function(prs) {
 		switch (ev.target.value) {
 		case 'action::save':
 			modal.confirm('Do you want to save "' + selected.name + '" preset?', function() {
-				for (var i = 0; i < selected.gains.length; i++)
-					selected.gains[i] = getValue('ch-eq-slider-' + (i + 1))
+				for (var i = 0; i < selected.gains.length; i++) {
+					selected.gains[i] = getValue('ch-eq-slider-' + (i + 1));
+				}
 				console.log('action::save', selected);
 				presets.setPreset(selected);
 			});
@@ -188,8 +189,13 @@ var init = function(prs) {
 			modal.prompt('New preset name', function(name) {
 				if (name && name.length > 0) {
 					var preset = JSON.parse(JSON.stringify(selected));
+					for (var i = 0; i < preset.gains.length; i++) {
+						preset.gains[i] = getValue('ch-eq-slider-' + (i + 1));
+					}
 					preset.name = name;
-					presets.setNewPreset(preset)
+					presets.setNewPreset(preset);
+					presets.setSelected(name);
+
 				}
 			}, function() {
 			});

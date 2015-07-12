@@ -1,6 +1,6 @@
 #Audio EQ for Chrome
 
-With [Audio EQ for Chrome](https://chrome.google.com/webstore/detail/lfafdlnjaliaghpjdajmlcnnblkgcefh/null) you can control your audio and video from all tabs in one place.
+With [Audio EQ for Chrome](https://chrome.google.com/webstore/detail/lfafdlnjaliaghpjdajmlcnnblkgcefh/) you can control your audio and video from all tabs in one place.
 More info [here](http://lab.ejci.net/Chrome-Audio-EQ/).
 
 For best results install HTML5ify (https://chrome.google.com/webstore/detail/html5ify/jikbjpjgjmmdhcmlagappehlpiljoaop). 
