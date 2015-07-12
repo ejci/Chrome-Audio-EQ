@@ -2,13 +2,16 @@
  * Script injected into to page
  */
 /* global window,
-          chrome,
-          document,
-          CONST
-                  */
+ chrome,
+ document,
+ CONST
+ */
 
 document.addEventListener("DOMContentLoaded", function onDocLoad() {
-  'use strict';
+	'use strict';
+
+	var eqStatus = localStorage.getItem('eq-status');
+	eqStatus = (eqStatus == null) ? 'enabled' : eqStatus;
 	//console.log('EQ init...', document.location.hostname);
 	var eq = (function() {
 		var audioContext = false;
@@ -101,9 +104,9 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 						//read the source channel count
 						filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
 						source.connect(filters[0]);
-            // 'index' is array index passed into targets.forEach above, using 'i' instead
-						var totalFilters = filters.length, node; 
-						for ( var i = 0; i < totalFilters; i++) {
+						// 'index' is array index passed into targets.forEach above, using 'i' instead
+						var totalFilters = filters.length, node;
+						for (var i = 0; i < totalFilters; i++) {
 							node = filters[i + 1];
 							if (node) {
 								filters[i].connect(node);
@@ -158,7 +161,6 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 				});
 			}
 		};
-
 		init();
 
 		return {
@@ -169,72 +171,102 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 			set : set
 		};
 	})();
-
-	/**
-	 * Check for DOM changes
-	 */
-	try {
-		var handleMutation = false, observer = false;
-		//Get default values
-		chrome.runtime.sendMessage({
-			action : 'get'
-		}, function(response) {
-			eq.set({
-				eq : response.eq,
-				config : response.config
-			});
-		});
-		//Listen to changes
-		chrome.runtime.onMessage.addListener(function(request, sender, cb) {
-			if (request.action == 'set') {
-				eq.set({
-					eq : request.eq,
-					config : request.config
-				});
-				cb();
-			}
-		});
+	console.log('eqStatus', eqStatus);
+	if (eqStatus === 'enabled') {
 
 		/**
-		 * Handle DOM mutation
-		 * @param {Object} mutations
-		 * @param {Object} observer
+		 * Check for DOM changes
 		 */
-		handleMutation = function(mutations, observer) {
-			if (mutations[0].addedNodes.length) {
-				try {
-					eq.attach();
-				} catch(e) {
-					//do nothing
-					console.error(e);
-					chrome.runtime.sendMessage({
-						action : 'error',
-						page : document.location.hostname,
-						source : 'page.js',
-						error : e
+		try {
+			var handleMutation = false, observer = false;
+			//Get default values
+			chrome.runtime.sendMessage({
+				action : 'get'
+			}, function(response) {
+				eq.set({
+					eq : response.eq,
+					config : response.config
+				});
+			});
+			//Listen to changes
+			chrome.runtime.onMessage.addListener(function(request, sender, cb) {
+				if (request.action == 'set') {
+					eq.set({
+						eq : request.eq,
+						config : request.config
 					});
-
+					cb();
 				}
-			}
-		};
+				if (request.action == 'enable') {
+					localStorage.setItem('eq-status', 'enabled');
+					cb();
+				}
+				if (request.action == 'disable') {
+					localStorage.setItem('eq-status', 'disabled');
+					cb();
+				}
+			});
 
-		observer = new MutationObserver(handleMutation);
-		observer.observe((document.body ? document.body : document), {
-			childList : true,
-			subtree : true,
-			attributes : false,
-			characterData : false
-		});
+			/**
+			 * Handle DOM mutation
+			 * @param {Object} mutations
+			 * @param {Object} observer
+			 */
+			handleMutation = function(mutations, observer) {
+				if (mutations[0].addedNodes.length) {
+					try {
+						eq.attach();
+					} catch(e) {
+						//do nothing
+						console.error(e);
+						chrome.runtime.sendMessage({
+							action : 'error',
+							page : document.location.hostname,
+							source : 'page.js',
+							error : e
+						});
 
-	} catch (e) {
-		//	throw e;
-		console.error(e);
-		chrome.runtime.sendMessage({
-			action : 'error',
-			page : document.location.hostname,
-			source : 'page.js',
-			error : e
-		});
+					}
+				}
+			};
+
+			observer = new MutationObserver(handleMutation);
+			observer.observe((document.body ? document.body : document), {
+				childList : true,
+				subtree : true,
+				attributes : false,
+				characterData : false
+			});
+
+		} catch (e) {
+			//	throw e;
+			console.error(e);
+			chrome.runtime.sendMessage({
+				action : 'error',
+				page : document.location.hostname,
+				source : 'page.js',
+				error : e
+			});
+		}
 	}
+	//Listen to enable/disable event
+	chrome.runtime.onMessage.addListener(function(request, sender, cb) {
+		if (request.action == 'enable') {
+			localStorage.setItem('eq-status', 'enabled');
+			cb();
+		}
+		if (request.action == 'disable') {
+			localStorage.setItem('eq-status', 'disabled');
+			cb();
+		}
+		if (request.action == 'status') {
+			cb(eqStatus);
+		}
+	});
+	chrome.runtime.sendMessage({
+		action : 'status',
+		domain : document.location.hostname,
+		status : eqStatus
+	});
 
 });
