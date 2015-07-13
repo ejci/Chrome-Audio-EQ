@@ -10,7 +10,13 @@
 document.addEventListener("DOMContentLoaded", function onDocLoad() {
 	'use strict';
 
-	var eqStatus = localStorage.getItem('eq-status');
+	var eqStatus = null;
+	try {
+		eqStatus = ( localStorage ? localStorage.getItem('eq-status') : null);
+	} catch(e) {
+		//eat it! in case there are issues with allow-same-origin
+		//TODO: Maybe I should the blacklistng info to chrome.storage in background.js per domain.
+	}
 	eqStatus = (eqStatus == null) ? 'enabled' : eqStatus;
 	//console.log('EQ init...', document.location.hostname);
 	if (eqStatus === 'enabled') {
