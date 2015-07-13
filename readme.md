@@ -29,7 +29,7 @@ It will not work on all pages. It works fine with Google Music, Youtube, Vimeo,.
 
 
 Author: [Miroslav Magda](http://blog.ejci.net)
-Version: 0.3.2.0
+Version: 0.3.2.1
 
 
 ####License
