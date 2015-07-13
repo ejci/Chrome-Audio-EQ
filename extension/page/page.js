@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 							target.src = '' + target.src;
 						}
 						source = audioContext.createMediaElementSource(target);
-						target.setAttribute("id", 'test');
 						//console.dir(target);
 						//console.log(audioContext);
 						//console.log(filters);
