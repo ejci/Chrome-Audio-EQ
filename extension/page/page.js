@@ -59,6 +59,10 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 			};
 
 			function getHostName(url) {
+				if ('blob:' == url.substring(0, 5)) {
+					url = url.replace('blob:', '');
+					url = unescape(url);
+				}
 				var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
 				if (match !== null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
 					return match[2];
@@ -96,11 +100,14 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 						//and then I need to force "reload" the src. its f***ed up but (kind off) it works :/
 						//of course this will only work if the video src has Access-Control-Allow-Origin header set :(
 						//https://code.google.com/p/chromium/issues/detail?id=477364
-						target.setAttribute('crossorigin', 'anonymous');
+						var src = target.src;
+						var crossorigin = target.getAttribute('crossorigin');
 						//console.dir(target);
-						if (target.src) {
+						if (src) {
 							//only reload if domains are not the same (so crossorigin attribute can kick in)
-							if (document.location.hostname == getHostName(target.src)) {
+							console.log(src, getHostName(src), document.location.hostname, ( crossorigin ? crossorigin : 'anonymous'));
+							if (document.location.hostname != getHostName(src) && 'blob:' != src.substring(0, 5) && !crossorigin) {
+								target.setAttribute('crossorigin', ( crossorigin ? crossorigin : 'anonymous'));
 								target.src = '' + target.src;
 							}
 							source = audioContext.createMediaElementSource(target);
