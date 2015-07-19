@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 						//console.dir(target);
 						if (src) {
 							//only reload if domains are not the same (so crossorigin attribute can kick in)
-							console.log(src, getHostName(src), document.location.hostname, ( crossorigin ? crossorigin : 'anonymous'));
+							//console.log(src, getHostName(src), document.location.hostname, ( crossorigin ? crossorigin : 'anonymous'));
 							if (document.location.hostname != getHostName(src) && 'blob:' != src.substring(0, 5) && !crossorigin) {
 								target.setAttribute('crossorigin', ( crossorigin ? crossorigin : 'anonymous'));
 								target.src = '' + target.src;

@@ -89,9 +89,11 @@ chrome.storage.local.get(function(storage) {
 });
 
 chrome.tabs.onActivated.addListener(function(active) {
+
 	chrome.tabs.sendMessage(active.tabId, {
 		action : 'status'
 	}, function(status) {
+
 		if (status == 'enabled') {
 			chrome.contextMenus.update('eqStatusEnable', {
 				enabled : false
