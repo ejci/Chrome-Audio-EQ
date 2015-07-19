@@ -12,6 +12,7 @@
 'use strict';
 
 var init = function(prs) {
+
 	var eq = CONST.EQ, version = CONST.VERSION, config = CONST.CONFIG;
 
 	// pulled  all function defs out of the try/catch
@@ -275,11 +276,7 @@ window.addEventListener("load", function() {
 	});
 });
 
-// currently unsused
-function forwardErrToBackground(e) {
-	chrome.runtime.sendMessage({
-		action : 'error',
-		source : 'popup.js',
-		error : e
-	});
-}
+//request tab capture (needed for background_v2.js)
+chrome.runtime.sendMessage({
+	action : 'eq-init'
+});
