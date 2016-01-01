@@ -7,7 +7,8 @@ Pros:
 Cons:
 	- chrome.tabCapture.capture needs to be called from popup.html context manualy
 	- cant automaticaly add filter when opening new tab (becaue of ^)
-	
+	- needs "tabcapture" permission
+		
 Im not sure about performance. But I guess it should be the same
 
 */

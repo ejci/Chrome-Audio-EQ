@@ -1,12 +1,13 @@
-/* global window,
-          document
-                  */
+/* 	global 
+	window,
+   	document
+*/
 'use strict';
 
-var chart = (function() {
+var chart = (function () {
 	var canvas, context;
 	var px = (window.devicePixelRatio > 1) ? 2 : 1;
-	var prepareChart = function(eq) {
+	var prepareChart = function (eq) {
 
 		canvas = document.getElementById('chart');
 		//330x40
@@ -31,7 +32,7 @@ var chart = (function() {
 		context.stroke();
 		context.beginPath();
 		context.stroke();
-		context.font = px * 8 + 'px Rationale';
+		context.font = px * 6 + 'px Arial';
 		context.textAlign = 'right';
 		context.fillStyle = 'rgb(50,90,140)';
 		context.fillText('+12', px * 8, px * (6 + 3));
@@ -42,19 +43,21 @@ var chart = (function() {
 		context.closePath();
 		refreshChart(eq);
 	};
-	var refreshChart = function(eq) {
+
+	var refreshChart = function (eq) {
+		//------------ line ------------//
 		var points = [];
 		for (var l = eq.length, i = 1; i < l; i++) {
 			points.push({
-				x : ((i - 1) * 32) + 12,
-				y : 20 - (15 / 12) * eq[i].gain,
-				xc : 0,
-				xy : 0
+				x: ((i - 1) * 32) + 12,
+				y: 20 - (15 / 12) * eq[i].gain,
+				xc: 0,
+				xy: 0
 			});
 		}
 		context.beginPath();
 		context.moveTo(px * points[0].x, px * points[0].y);
-		for ( i = 1; i < points.length - 2; i++) {
+		for (i = 1; i < points.length - 2; i++) {
 			var xc = (points[i].x + points[i + 1].x) / 2;
 			var yc = (points[i].y + points[i + 1].y) / 2;
 			context.quadraticCurveTo(px * points[i].x, px * points[i].y, px * xc, px * yc);
@@ -64,9 +67,38 @@ var chart = (function() {
 		context.strokeStyle = 'rgb(50,90,140)';
 		context.stroke();
 
+		//------------ gradient ------------//
+		var gradiend = context.createLinearGradient(px * 0, px * 0, px * 0, px * 40);
+		gradiend.addColorStop(0, "rgba(50,90,140,200)");
+		gradiend.addColorStop(0.5, "rgba(255,255,255,0)");
+		gradiend.addColorStop(1, "rgba(50,90,140,200)")
+		points = [];
+
+		for (var l = eq.length, i = 1; i < l; i++) {
+			points.push({
+				x: ((i - 1) * 32) + 12,
+				y: 20 - (15 / 12) * eq[i].gain,
+				xc: 0,
+				xy: 0
+			});
+		}
+		context.beginPath();
+		context.moveTo(px * 12, px * 20);
+		context.lineTo(px * points[0].x, px * points[0].y);
+		for (i = 1; i < points.length - 2; i++) {
+			var xc = (points[i].x + points[i + 1].x) / 2;
+			var yc = (points[i].y + points[i + 1].y) / 2;
+			context.quadraticCurveTo(px * points[i].x, px * points[i].y, px * xc, px * yc);
+		}
+		context.quadraticCurveTo(px * points[i].x, px * points[i].y, px * points[i + 1].x, px * points[i + 1].y);
+		context.lineTo(px * 300, px * 20);
+		context.closePath();
+		context.fillStyle = gradiend;
+		context.fill();
+
 	};
 	return {
-		prepareChart : prepareChart,
-		refreshChart : refreshChart
+		prepareChart: prepareChart,
+		refreshChart: refreshChart
 	};
 })();

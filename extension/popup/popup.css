@@ -2,8 +2,8 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Rationale', sans-serif;
-	font-size: 10px;
+	font-family: 'Arial', sans-serif;
+	font-size: 8px;
 	color: rgb(50,90,140);
 }
 
@@ -43,6 +43,7 @@
 	padding: 0;
 	margin: 0;
 	display: inline;
+	font-size: 10px;
 	position: absolute;
 }
 .button.indicator {
@@ -86,7 +87,7 @@ input[type=checkbox]:checked ~ .button:active,
 }
 .chart {
 	position: absolute;
-	right: 10px;
+	right: 12px;
 }
 .controls-sliders {
 	padding-top: 10px;
@@ -115,12 +116,13 @@ input[type=checkbox]:checked ~ .button:active,
 	height: 100%;
 	display: block;
 	line-height: 16px;
+	font-size: 10px;
 }
 .controls-sliders .slider.master {
 	width: 50px;
 }
 .controls-sliders .slider.empty {
-	width: 8px;
+	width: 4px;
 }
 .controls-sliders .sliders {
 }
