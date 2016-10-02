@@ -16,8 +16,8 @@ It will not work on all pages. It works fine with Google Music, Youtube, Vimeo,.
 
 ##Test videos
 ###YouTube:
-* [http://www.youtube.com/watch?v=nLwML2PagbY](http://www.youtube.com/watch?v=nLwML2PagbY)
-* [http://www.youtube.com/watch?v=Q3iJvJmlwVk](http://www.youtube.com/watch?v=Q3iJvJmlwVk)
+* [https://www.youtube.com/watch?v=nXOXXkx8rj0](https://www.youtube.com/watch?v=nXOXXkx8rj0)
+* [https://www.youtube.com/watch?v=PD-MdiUm1_Y](https://www.youtube.com/watch?v=PD-MdiUm1_Y)
 
 ###Vimeo:
 * [http://vimeo.com/watch](http://vimeo.com/watch)
@@ -29,7 +29,7 @@ It will not work on all pages. It works fine with Google Music, Youtube, Vimeo,.
 
 
 Author: [Miroslav Magda](http://blog.ejci.net)
-Version: 0.3.2.1
+Version: 0.3.3.0
 
 
 ####License
