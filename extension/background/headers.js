@@ -29,7 +29,7 @@ chrome.webRequest.onHeadersReceived.addListener(function (details) {
 			name: 'chrome-audio-eq',
 			value: 'enabled'
 		});
-		console.log(details.url, details.responseHeaders);
+		//console.log(details.url, details.responseHeaders);
 	}
 	return {
 		responseHeaders: details.responseHeaders
@@ -44,11 +44,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
 	//This is not the best thing as I would rather only manipulate request headers for video & audio files...
 	//But at request time its impossible to know what kind of response you will get (its completely server side)
 	//There could be a way to add specific parameters to each audio/video tags and then detect it bu it think that would be a mess
-	//So if you managed to get to this source code and you understand what this is doing feel free to suggest better way
 	//console.log('onBeforeSendHeaders',details);
 	var origin = false;
 	var host = '';
-	console.log(details.requestHeaders);
+	//console.log(details.requestHeaders);
 	for (var i = 0; i < details.requestHeaders.length; ++i) {
 		if (details.requestHeaders[i].name === 'Origin') {
 			origin = true;
