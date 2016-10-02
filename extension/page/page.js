@@ -105,11 +105,11 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 						var src = (target.src ? target.src : target.currentSrc);
 
 						var crossorigin = target.getAttribute('crossorigin');
-						console.log(target);
+						//console.log(target);
 						if (src) {
-							console.log('src', src);
+							//console.log('src', src);
 							//only reload if domains are not the same (so crossorigin attribute can kick in)
-							console.log(src, getHostName(src), document.location.hostname, (crossorigin ? crossorigin : 'anonymous'));
+							//console.log(src, getHostName(src), document.location.hostname, (crossorigin ? crossorigin : 'anonymous'));
 							if (document.location.hostname != getHostName(src) && 'blob:' != src.substring(0, 5) && !crossorigin) {
 								target.setAttribute('crossorigin', (crossorigin ? crossorigin : 'anonymous'));
 								//target.setAttribute('preload', 'auto');
@@ -123,12 +123,12 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 									}
 								}
 							}
-							setTimeout(function(){
-								console.dir(target);
-							},2000)
-							console.log(target.src)
-							console.log(target.currentSrc)
-							console.dir(target);
+							//setTimeout(function(){
+							//	console.dir(target);
+							//},2000)
+							//console.log(target.src)
+							//console.log(target.currentSrc)
+							//console.dir(target);
 							
 							source = audioContext.createMediaElementSource(target);
 							//read the source channel count
