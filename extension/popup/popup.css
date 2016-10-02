@@ -37,15 +37,22 @@
 .button.presets select {
 	/*dont use display:none -> it will not work*/
 	display: hidden;
-	height: 0;
-	width: 0;
+	height: 100%;
+	width: 100%;
 	border: 0;
 	padding: 0;
 	margin: 0;
 	display: inline;
 	font-size: 10px;
+	left: 0;
+	top:0;
 	position: absolute;
+	background:transparent;
+	color: transparent;
+	-webkit-appearance: none;
 }
+
+
 .button.indicator {
 	color: rgb(120,120,120);
 	background: linear-gradient(to bottom, rgb(239,239,239) 70%,rgb(219,219,219) 100%);

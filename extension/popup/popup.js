@@ -40,6 +40,41 @@ var init = function (prs) {
 		return false;
 	}
 
+	function loadPresets(){
+		//load EQ presets
+		if (presets.getSelected().default === true) {
+			document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
+		} else {
+			document.getElementById('preset_delete').removeAttribute('disabled');
+		}
+
+		function appendPreset(preset, presetsSelect, section) {
+			var option = document.createElement("option");
+			option.text = preset.name;
+			option.setAttribute('value', ['preset', section, option.text].join('::'));
+			if (presets.isSelected(preset)) {
+				option.setAttribute('selected', 'selected');
+			}
+			presetsSelect.appendChild(option, null);
+		}
+
+
+		var userPresets = presets.getUsers();
+		var userPresetsSelect = document.getElementById('presetsSelectUser');
+		var predefinedPresets = presets.getPredefined();
+		var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
+
+		userPresetsSelect.innerHTML = '';
+		for (var i = 0; i < userPresets.length; i++) {
+			appendPreset(userPresets[i], userPresetsSelect, 'my');
+		}
+
+		predefinedPresetsSelect.innerHTML = '';
+		for (var i = 0; i < predefinedPresets.length; i++) {
+			appendPreset(predefinedPresets[i], predefinedPresetsSelect, 'default')
+		}
+	}
+
 	function propagateData() {
 		//send message
 		chrome.runtime.sendMessage({
@@ -123,42 +158,8 @@ var init = function (prs) {
 	// TODO: Should only need to build this one time,
 	//        but will need to append new saved presets.
 	document.getElementById('presets').onclick = function (ev) {
-		//load EQ presets
-		if (presets.getSelected().default === true) {
-			document.getElementById('preset_delete').setAttribute('disabled', 'disabled');
-		} else {
-			document.getElementById('preset_delete').removeAttribute('disabled');
-		}
+		//loadPresets();
 
-		function appendPreset(preset, presetsSelect, section) {
-			var option = document.createElement("option");
-			option.text = preset.name;
-			option.setAttribute('value', ['preset', section, option.text].join('::'));
-			if (presets.isSelected(preset)) {
-				option.setAttribute('selected', 'selected');
-			}
-			presetsSelect.appendChild(option, null);
-		}
-
-
-		var userPresets = presets.getUsers();
-		var userPresetsSelect = document.getElementById('presetsSelectUser');
-		var predefinedPresets = presets.getPredefined();
-		var predefinedPresetsSelect = document.getElementById('presetsSelectPredefined');
-
-		userPresetsSelect.innerHTML = '';
-		for (var i = 0; i < userPresets.length; i++) {
-			appendPreset(userPresets[i], userPresetsSelect, 'my');
-		}
-
-		predefinedPresetsSelect.innerHTML = '';
-		for (var i = 0; i < predefinedPresets.length; i++) {
-			appendPreset(predefinedPresets[i], predefinedPresetsSelect, 'default')
-		}
-
-		var mousedownEvent = document.createEvent("MouseEvent");
-		mousedownEvent.initMouseEvent("mousedown");
-		document.getElementById('presetsSelect').dispatchEvent(mousedownEvent);
 	};
 
 	// TODO: This doesn't handle re-selecting the current preset
@@ -229,6 +230,7 @@ var init = function (prs) {
 					selected: selected.name
 				});
 				updateEq();
+				loadPresets();
 		}
 		chrome.storage.sync.set({
 			presets: presets.getAll()
@@ -244,7 +246,7 @@ var init = function (prs) {
 	}, function (response) {
 		eq = response.eq;
 		setAllEqSliders();
-
+		loadPresets();
 		config = response.config;
 		document.getElementById('channels').checked = config.mono;
 		document.getElementById('snap').checked = config.snap;
