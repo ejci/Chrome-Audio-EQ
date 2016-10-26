@@ -208,7 +208,6 @@ var init = function (prs) {
 					}
 				}, function () {
 				});
-
 				break;
 			case 'action::delete':
 				modal.confirm('Do you want to delete "' + selected.name + '" preset?', function () {
