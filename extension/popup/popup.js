@@ -40,6 +40,12 @@ var init = function (prs) {
 		return false;
 	}
 
+	function savePresets(){
+		chrome.storage.sync.set({
+			presets: presets.getAll()
+		});
+	}
+
 	function loadPresets(){
 		//load EQ presets
 		if (presets.getSelected().default === true) {
@@ -184,6 +190,7 @@ var init = function (prs) {
 					}
 					console.log('action::save', selected);
 					presets.setPreset(selected);
+					savePresets();
 				});
 
 				break;
@@ -197,7 +204,7 @@ var init = function (prs) {
 						preset.name = name;
 						presets.setNewPreset(preset);
 						presets.setSelected(name);
-
+						savePresets();
 					}
 				}, function () {
 				});
@@ -205,6 +212,7 @@ var init = function (prs) {
 			case 'action::delete':
 				modal.confirm('Do you want to delete "' + selected.name + '" preset?', function () {
 					presets.removeByName(selected.name);
+					savePresets();
 				});
 				break;
 			case 'action::reset':
@@ -213,6 +221,7 @@ var init = function (prs) {
 					presets.setSelected();
 					// setSelected calls getSelected internally, so no need calling again
 					updateEq();
+					savePresets();
 				});
 				break;
 			case 'action::reset_all':
@@ -220,6 +229,7 @@ var init = function (prs) {
 					presets.resetAll();
 					presets.setSelected();
 					updateEq();
+					savePresets();
 				});
 				break;
 			default:
@@ -231,10 +241,8 @@ var init = function (prs) {
 				});
 				updateEq();
 				loadPresets();
+				savePresets();
 		}
-		chrome.storage.sync.set({
-			presets: presets.getAll()
-		});
 	};
 
 	//intialization
