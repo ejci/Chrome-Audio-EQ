@@ -116,64 +116,64 @@ chrome.tabs.onActivated.addListener(function (active) {
 
 
 //MENUS
-var menu = {};
-menu.root = chrome.contextMenus.create({
-	title: "Audio EQ",
-	contexts: ['page']
-});
-menu.eqStatusEnable = chrome.contextMenus.create({
-	id: 'eqStatusEnable',
-	title: "Enable for this domain",
-	enabled: false,
-	parentId: menu.root,
-	onclick: function () {
-		chrome.tabs.query({
-			active: true
-		}, function (tabs) {
-			for (var i = 0, l = tabs.length; i < l; i++) {
-				var tab = tabs[i];
-				chrome.contextMenus.update('eqStatusEnable', {
-					enabled: false
-				});
-				chrome.contextMenus.update('eqStatusDisable', {
-					enabled: true
-				});
-				chrome.tabs.sendMessage(tab.id, {
-					action: 'enable'
-				}, function () {
-					chrome.tabs.reload(tab.id);
-
-				});
-			}
-		});
-	}
-});
-
-
-menu.eqStatusDisable = chrome.contextMenus.create({
-	id: 'eqStatusDisable',
-	title: "Disable for this domain",
-	enabled: true,
-	parentId: menu.root,
-	onclick: function () {
-		chrome.tabs.query({
-			active: true
-		}, function (tabs) {
-			for (var i = 0, l = tabs.length; i < l; i++) {
-				var tab = tabs[i];
-				chrome.contextMenus.update('eqStatusEnable', {
-					enabled: true
-				});
-				chrome.contextMenus.update('eqStatusDisable', {
-					enabled: false
-				});
-				chrome.tabs.sendMessage(tab.id, {
-					action: 'disable'
-				}, function () {
-					chrome.tabs.reload(tab.id);
-
-				});
-			}
-		});
-	}
-});
+// var menu = {};
+// menu.root = chrome.contextMenus.create({
+// 	title: "Audio EQ",
+// 	contexts: ['page']
+// });
+// menu.eqStatusEnable = chrome.contextMenus.create({
+// 	id: 'eqStatusEnable',
+// 	title: "Enable for this domain",
+// 	enabled: false,
+// 	parentId: menu.root,
+// 	onclick: function () {
+// 		chrome.tabs.query({
+// 			active: true
+// 		}, function (tabs) {
+// 			for (var i = 0, l = tabs.length; i < l; i++) {
+// 				var tab = tabs[i];
+// 				chrome.contextMenus.update('eqStatusEnable', {
+// 					enabled: false
+// 				});
+// 				chrome.contextMenus.update('eqStatusDisable', {
+// 					enabled: true
+// 				});
+// 				chrome.tabs.sendMessage(tab.id, {
+// 					action: 'enable'
+// 				}, function () {
+// 					chrome.tabs.reload(tab.id);
+//
+// 				});
+// 			}
+// 		});
+// 	}
+// });
+//
+//
+// menu.eqStatusDisable = chrome.contextMenus.create({
+// 	id: 'eqStatusDisable',
+// 	title: "Disable for this domain",
+// 	enabled: true,
+// 	parentId: menu.root,
+// 	onclick: function () {
+// 		chrome.tabs.query({
+// 			active: true
+// 		}, function (tabs) {
+// 			for (var i = 0, l = tabs.length; i < l; i++) {
+// 				var tab = tabs[i];
+// 				chrome.contextMenus.update('eqStatusEnable', {
+// 					enabled: true
+// 				});
+// 				chrome.contextMenus.update('eqStatusDisable', {
+// 					enabled: false
+// 				});
+// 				chrome.tabs.sendMessage(tab.id, {
+// 					action: 'disable'
+// 				}, function () {
+// 					chrome.tabs.reload(tab.id);
+//
+// 				});
+// 			}
+// 		});
+// 	}
+// });
