@@ -115,11 +115,14 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 								//target.setAttribute('preload', 'auto');
 								//force "reload" so addedd crossorigin attribute can kick in
 								if (target.src) {
-									target.src = ''+target.src;
+									target.src = '' + target.src;
 									//target.load();
 								} else {
 									if (target.currentSrc) {
-										target.load();
+										if (!target.paused) {
+											target.load();
+										}
+
 									}
 								}
 							}
@@ -129,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function onDocLoad() {
 							//console.log(target.src)
 							//console.log(target.currentSrc)
 							//console.dir(target);
-							
+
 							source = audioContext.createMediaElementSource(target);
 							//read the source channel count
 							filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
